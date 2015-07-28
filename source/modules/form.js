@@ -2,6 +2,7 @@
     function()
     {
         var JihadForm = window.JihadForm = {
+            lock: null
         };
 
         /**
@@ -29,6 +30,32 @@
         JihadForm.getData = function($form)
         {
             return $form.serialize();
+        };
+
+        /**
+         * Returns lock
+         */
+
+        JihadForm.getLock = function()
+        {
+            if (this.lock === null)
+                this.lock = this.createLock();
+
+            return this.lock;
+        };
+
+        /**
+         * Creates lock
+         */
+
+        JihadForm.createLock = function()
+        {
+            var Lock = {};
+
+            return $.extend(
+                Lock,
+                JihadLock
+            );
         };
 
         /**
@@ -85,6 +112,7 @@
         JihadForm.beforeSend = function($form)
         {
             this.submitsDisable($form);
+            this.getLock().lock($form);
         };
 
         /**
@@ -94,6 +122,7 @@
         JihadForm.afterSend = function($form)
         {
             this.submitsEnable($form);
+            this.getLock().unlock($form);
         };
 
         /**
@@ -183,6 +212,9 @@
         {
             var self = this;
             var $form = $(form);
+
+            if (this.getLock().isLocked($form))
+                return false;
 
             $.ajax(
                 this.getAction($form),
