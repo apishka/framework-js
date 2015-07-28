@@ -31,8 +31,9 @@
 
         JihadLock.lock = function($elem)
         {
-            console.log($elem, 'locked');
             $elem.data('jihad-locked', 1);
+
+            this.afterLock($elem);
         };
 
         /**
@@ -50,8 +51,9 @@
 
         JihadLock.unlock = function($elem)
         {
-            console.log($elem, 'unlock');
             $elem.data('jihad-locked', 0);
+
+            this.afterUnlock($elem);
         };
 
         /**
