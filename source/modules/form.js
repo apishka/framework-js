@@ -2,7 +2,8 @@
     function()
     {
         var JihadForm = window.JihadForm = {
-            lock: null
+            lock: null,
+            lockSelector: null
         };
 
         /**
@@ -45,17 +46,21 @@
         };
 
         /**
+         * Returns lock selector
+         */
+
+        JihadForm.getLockSelector = function()
+        {
+            return this.lockSelector;
+        };
+
+        /**
          * Creates lock
          */
 
         JihadForm.createLock = function()
         {
-            var Lock = {};
-
-            return $.extend(
-                Lock,
-                JihadLock
-            );
+            return new JihadLock(this.getLockSelector());
         };
 
         /**

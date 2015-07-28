@@ -1,68 +1,74 @@
 (
     function()
     {
-        var JihadLock = window.JihadLock = {
-        };
-
-        /**
-         * Return toggle selector
-         */
-
-        JihadLock.getToggleSelector = function($elem)
+        var JihadLock = window.JihadLock = function(toggle_selector)
         {
-            return '.js-lock-toggle';
-        };
+            /**
+             * Toggle selector
+             */
 
-        /**
-         * Is locked
-         */
+            this._toggle_selector = toggle_selector || '.js-lock-toggle';
 
-        JihadLock.isLocked = function($elem)
-        {
-            if ($elem.data('jihad-locked'))
-                return true;
+            /**
+             * Return toggle selector
+             */
 
-            return false;
-        };
+            this.getToggleSelector = function($elem)
+            {
+                return this._toggle_selector;
+            };
 
-        /**
-         * Lock
-         */
+            /**
+             * Is locked
+             */
 
-        JihadLock.lock = function($elem)
-        {
-            $elem.data('jihad-locked', 1);
+            this.isLocked = function($elem)
+            {
+                if ($elem.data('jihad-locked'))
+                    return true;
 
-            this.afterLock($elem);
-        };
+                return false;
+            };
 
-        /**
-         * After lock
-         */
+            /**
+             * Lock
+             */
 
-        JihadLock.afterLock = function($elem)
-        {
-            $elem.find(this.getToggleSelector($elem)).toggleClass('hidden');
-        };
+            this.lock = function($elem)
+            {
+                $elem.data('jihad-locked', 1);
 
-        /**
-         * Unlock
-         */
+                this.afterLock($elem);
+            };
 
-        JihadLock.unlock = function($elem)
-        {
-            $elem.data('jihad-locked', 0);
+            /**
+             * After lock
+             */
 
-            this.afterUnlock($elem);
-        };
+            this.afterLock = function($elem)
+            {
+                $elem.find(this.getToggleSelector($elem)).toggleClass('hidden');
+            };
 
-        /**
-         * After unlock
-         */
+            /**
+             * Unlock
+             */
 
-        JihadLock.afterUnlock = function($elem)
-        {
-            $elem.find(this.getToggleSelector($elem)).toggleClass('hidden');
+            this.unlock = function($elem)
+            {
+                $elem.data('jihad-locked', 0);
+
+                this.afterUnlock($elem);
+            };
+
+            /**
+             * After unlock
+             */
+
+            this.afterUnlock = function($elem)
+            {
+                $elem.find(this.getToggleSelector($elem)).toggleClass('hidden');
+            };
         };
     }
     ()
