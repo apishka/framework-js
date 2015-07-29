@@ -1,5 +1,6 @@
 {
-    "name": "damnedest-rock/jihad-js",
+    "name": "component/jihad-js",
+    "type": "component",
     "keywords": ["jihad", "js"],
     "authors": [
         {
