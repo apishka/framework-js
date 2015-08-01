@@ -28,8 +28,10 @@
 
         JihadBlock.isInitialized = function($target)
         {
-            var jihadNodeData = $.data($target[0]);
-            return jihadNodeData.blocks && jihadNodeData.blocks[this.getSelector()];
+            if ($target.data('jihad-initialized'))
+                return true;
+
+            return false;
         };
 
         /**
@@ -56,9 +58,6 @@
 
         JihadBlock.initialize = function($target)
         {
-            var jihadNodeData = $.data($target[0]);
-            jihadNodeData.blocks = jihadNodeData.blocks || {};
-            jihadNodeData.blocks[this.getSelector()] = true;
         };
 
         /**
@@ -67,14 +66,23 @@
 
         JihadBlock.run = function($target)
         {
-            if (!this.isInitialized($target))
-            {
-                this.initialize($target);
-                this.applyBindings($target);
-                if (typeof this.init === 'function') {
-                    this.init($target);
+            var self = this;
+
+            $.each(
+                $target,
+                function()
+                {
+                    var $elem = $(this);
+
+                    if (!self.isInitialized($elem))
+                    {
+                        $elem.data('jihad-initialized', 1);
+
+                        self.initialize($elem);
+                        self.applyBindings($elem);
+                    }
                 }
-            }
+            );
         };
     }()
 );
