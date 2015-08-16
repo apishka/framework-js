@@ -44,6 +44,13 @@ module.exports = function (grunt) {
             JihadJs: {
                 files: {
                     'dist/js/jihad-js.js': [
+                        // Help libraries
+                        'node_modules/autosize/dist/autosize.js',
+                        'node_modules/dot/doT.js',
+                        'source/library/jquery.serialize-object.js',
+                        'source/library/jquery.sticky-kit.js',
+                        'source/library/jquery.hotkeys.js',
+
                         'source/jihad.js',
                         'source/modules/*.js',
                         'source/blocks/*/*.js',

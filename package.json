@@ -2,7 +2,6 @@
   "name": "jihad-js",
   "private": true,
   "devDependencies": {
-    "animate.css": "^3.4.0",
     "autosize": "^3.0.8",
     "dot": "^1.0.3",
     "form-serializer": "^2.5.0",
