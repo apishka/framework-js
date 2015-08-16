@@ -65,7 +65,7 @@ module.exports = function (grunt) {
         less: {
             JihadJs: {
                 files: {
-                    'dist/css/jihad.css': markupMain('jihad.less')
+                    'dist/css/jihad-js.css': markupMain('jihad.less')
                 }
             }
         },
@@ -75,15 +75,15 @@ module.exports = function (grunt) {
                 browsers: ['last 2 versions', 'ie 8', 'ie 9', 'android 2.3', 'android 4', 'opera 12']
             },
             JihadJs: {
-                src: 'dist/css/jihad.css'
+                src: 'dist/css/jihad-js.css'
             }
         },
 
         cssmin: {
             JihadJs: {
                 files: {
-                    'dist/css/jihad.css': [
-                        'dist/css/admin.css'
+                    'dist/css/jihad-js.css': [
+                        'dist/css/jihad-js.css'
                     ]
                 }
             }
