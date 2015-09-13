@@ -1,6 +1,6 @@
 {
   "name": "jihad-js",
-  "version": "1.0.5",
+  "version": "1.0.9",
   "devDependencies": {
     "autosize": "^3.0.10",
     "dot": "^1.0.3",
