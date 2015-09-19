@@ -2,10 +2,9 @@
     function()
     {
         var JihadModal = window.JihadModal = {
-            active: null,
-            tpl2id: {},
-            preprocess: true,
-            context: null
+            $active: null,
+            tpl: 'modal',
+            preprocess: true
         };
 
         /**
@@ -14,7 +13,7 @@
 
         JihadModal.getTpl = function()
         {
-            return 'modal';
+            return this.tpl;
         };
 
         /**
@@ -34,7 +33,7 @@
         {
             var url = this.getUrl();
 
-            if (this.preprocess)
+            if (url && this.preprocess)
             {
                 var parsed = JihadUrl.parse(url, true);
 
@@ -86,9 +85,9 @@
          * Returns modal
          */
 
-        JihadModal.getModal = function()
+        JihadModal.getActive = function()
         {
-            return $('#' + JihadModal.tpl2id[this.getTpl()]);
+            return this.$active;
         };
 
         /**
@@ -151,9 +150,7 @@
 
         JihadModal.success = function(result)
         {
-            JihadModal.active = this.getModal();
-
-            this.getModal().modal('show');
+            JihadModal.getActive().modal('show');
         };
 
         /**
@@ -162,7 +159,7 @@
 
         JihadModal.successLayout = function(result)
         {
-            var $content = this.getModal().find('.modal-content');
+            var $content = JihadModal.getActive().find('.modal-content');
 
             $content.html(result['layouts']['layout_content']);
         };
@@ -180,51 +177,52 @@
          * Shows modal
          */
 
-        JihadModal.show = function()
+        JihadModal.show = function(options)
         {
-            var $modal;
-            if (JihadModal.tpl2id[this.getTpl()])
+            if (JihadModal.getActive())
+                JihadModal.getActive().remove();
+
+            JihadModal.$active = JihadTpl.html(this.getTpl(), options || {});
+            JihadCore.$body.append(JihadModal.getActive());
+
+            var url = this.preprocessUrl();
+            if (url)
             {
-                $modal = this.getModal();
+                var self = this;
+                $.ajax(
+                    url,
+                    {
+                        beforeSend: function()
+                        {
+                            self.beforeSend();
+                        },
+                        complete: function()
+                        {
+                            self.afterSend();
+                        },
+                        dataType:   'json',
+                        data:       this.getData(),
+                        type:       this.getMethod(),
+                        success:    function(data, textStatus, jqXHR)
+                        {
+                            self.onSuccess(data, textStatus, jqXHR);
+
+                            // After do all job we assign bindings
+                            JihadCore.blocksRun(self.getActive());
+                        },
+                        error: function(jqXHR, textStatus, errorThrown)
+                        {
+                            self.onError(jqXHR, textStatus, errorThrown);
+                        }
+                    }
+                );
             }
             else
             {
-                var $modal = JihadTpl.html(this.getTpl());
+                this.success({});
 
-                JihadModal.tpl2id[this.getTpl()] = $modal.attr('id');
-                JihadCore.$body.append($modal);
+                JihadCore.blocksRun(JihadModal.getActive());
             }
-
-            JihadModal.active = $modal;
-
-            var self = this;
-            $.ajax(
-                this.preprocessUrl(),
-                {
-                    beforeSend: function()
-                    {
-                        self.beforeSend();
-                    },
-                    complete: function()
-                    {
-                        self.afterSend();
-                    },
-                    dataType:   'json',
-                    data:       this.getData(),
-                    type:       this.getMethod(),
-                    success:    function(data, textStatus, jqXHR)
-                    {
-                        self.onSuccess(data, textStatus, jqXHR);
-
-                        // After do all job we assign bindings
-                        JihadCore.blocksRun(self.getModal());
-                    },
-                    error: function(jqXHR, textStatus, errorThrown)
-                    {
-                        self.onError(jqXHR, textStatus, errorThrown);
-                    }
-                }
-            );
 
             return false;
         };
@@ -235,7 +233,7 @@
 
         JihadModal.hide = function()
         {
-            JihadModal.active.modal('hide');
+            JihadModal.getActive().modal('hide');
         }
     }
     ()
