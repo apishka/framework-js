@@ -27,7 +27,7 @@
                     return '.jh-list';
                 },
 
-                init: function ($target)
+                initialize: function ($target)
                 {
                     this.$ = $target;
                     this._checkDistance = JihadCore.throttle(this._checkDistance.bind(this, $target), 500);
