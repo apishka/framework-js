@@ -67,6 +67,11 @@
 
                 _checkDistance: function ($elem)
                 {
+                    var lock = new JihadLock(this.getSelector());
+
+                    if (lock.isLocked($elem))
+                        return false;
+
                     var self = this,
                         $win = JihadCore.$win,
                         scrollBottom,
@@ -89,6 +94,11 @@
                                         dataType: 'json',
                                         complete: function () {
                                             self.request = null;
+                                            lock.unlock($elem);
+                                        },
+                                        beforeSend: function()
+                                        {
+                                            lock.lock($elem);
                                         }
                                     }
                                 )
@@ -104,6 +114,8 @@
                                             $html = $(result.html);
                                             $elem.append($html);
                                             JihadCore.blocksRun($html);
+                                            self.request = null;
+                                            lock.unlock($elem);
                                         }
                                     }
                                 )
