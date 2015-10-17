@@ -64,11 +64,11 @@
 
                     initializeDoubleBounce: function($target)
                     {
-                        $target.addClass('sk-spinner sk-double-bounce');
+                        $target.addClass('sk-double-bounce');
                         $target.html(
                             [
-                                '<div class="sk-double-bounce1"></div>',
-                                '<div class="sk-double-bounce2"></div>'
+                                '<div class="sk-child sk-double-bounce1"></div>',
+                                '<div class="sk-child sk-double-bounce2"></div>'
                             ].join('')
                         );
                     },
@@ -79,14 +79,14 @@
 
                     initializeWave: function($target)
                     {
-                        $target.addClass('sk-spinner sk-wave');
+                        $target.addClass('sk-wave');
                         $target.html(
                             [
-                                '<div class="sk-rect1"></div>',
-                                '<div class="sk-rect2"></div>',
-                                '<div class="sk-rect3"></div>',
-                                '<div class="sk-rect4"></div>',
-                                '<div class="sk-rect5"></div>'
+                                '<div class="sk-rect sk-rect1"></div>',
+                                '<div class="sk-rect sk-rect2"></div>',
+                                '<div class="sk-rect sk-rect3"></div>',
+                                '<div class="sk-rect sk-rect4"></div>',
+                                '<div class="sk-rect sk-rect5"></div>'
                             ].join('')
                         );
                     },
@@ -97,7 +97,7 @@
 
                     initializePulse: function($target)
                     {
-                        $target.addClass('sk-spinner sk-spinner-pulse');
+                        $target.addClass('sk-spinner-pulse');
                     },
 
                     /**
@@ -106,12 +106,12 @@
 
                     initializeThreeWave: function($target)
                     {
-                        $target.addClass('sk-spinner sk-three-bounce');
+                        $target.addClass('sk-three-bounce');
                         $target.html(
                             [
-                                '<div class="sk-bounce1"></div>',
-                                '<div class="sk-bounce2"></div>',
-                                '<div class="sk-bounce3"></div>'
+                                '<div class="sk-child sk-bounce1"></div>',
+                                '<div class="sk-child sk-bounce2"></div>',
+                                '<div class="sk-child sk-bounce3"></div>'
                             ].join('')
                         );
                     },
@@ -122,7 +122,7 @@
 
                     initializeCircle: function($target)
                     {
-                        $target.addClass('sk-spinner sk-fading-circle');
+                        $target.addClass('sk-fading-circle');
                         $target.html(
                             [
                                 '<div class="sk-circle1 sk-circle"></div>',
