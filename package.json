@@ -1,6 +1,12 @@
 {
   "name": "jihad-js",
   "version": "1.0.13",
+  "description": "Jihad JS",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/damnedest-rock/jihad-js.git"
+  },
   "devDependencies": {
     "autosize": "^3.0.13",
     "dot": "^1.0.3",
@@ -15,6 +21,7 @@
     "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-uglify": "^0.9.2",
     "less-plugin-glob": "^1.1.0",
-    "load-grunt-tasks": "^3.3.0"
+    "load-grunt-tasks": "^3.3.0",
+    "spinkit": "^1.2.2"
   }
 }
