@@ -65,7 +65,7 @@
                     initializeDoubleBounce: function($target)
                     {
                         $target.addClass('sk-spinner sk-double-bounce');
-                        $target.innerHTML(
+                        $target.html(
                             [
                                 '<div class="sk-double-bounce1"></div>',
                                 '<div class="sk-double-bounce2"></div>'
@@ -80,7 +80,7 @@
                     initializeWave: function($target)
                     {
                         $target.addClass('sk-spinner sk-wave');
-                        $target.innerHTML(
+                        $target.html(
                             [
                                 '<div class="sk-rect1"></div>',
                                 '<div class="sk-rect2"></div>',
@@ -107,7 +107,7 @@
                     initializeThreeWave: function($target)
                     {
                         $target.addClass('sk-spinner sk-three-bounce');
-                        $target.innerHTML(
+                        $target.html(
                             [
                                 '<div class="sk-bounce1"></div>',
                                 '<div class="sk-bounce2"></div>',
@@ -123,7 +123,7 @@
                     initializeCircle: function($target)
                     {
                         $target.addClass('sk-spinner sk-fading-circle');
-                        $target.innerHTML(
+                        $target.html(
                             [
                                 '<div class="sk-circle1 sk-circle"></div>',
                                 '<div class="sk-circle2 sk-circle"></div>',
