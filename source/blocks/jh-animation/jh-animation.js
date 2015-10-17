@@ -52,8 +52,8 @@
                                 AnimationBlock.initializeThreeWave($target);
                                 break;
 
-                            case 'circle':
-                                AnimationBlock.initializeCircle($target);
+                            case 'fading-circle':
+                                AnimationBlock.initializeFadingCircle($target);
                                 break;
                         }
                     },
@@ -120,7 +120,7 @@
                      * Initialize spinner for double bounce
                      */
 
-                    initializeCircle: function($target)
+                    initializeFadingCircle: function($target)
                     {
                         $target.addClass('sk-fading-circle');
                         $target.html(
