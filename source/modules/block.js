@@ -61,6 +61,14 @@
         };
 
         /**
+         * Returns finalize function
+         */
+
+        JihadBlock.finalize = function($target)
+        {
+        };
+
+        /**
          * Run block
          */
 
@@ -80,6 +88,7 @@
 
                         self.initialize($elem);
                         self.applyBindings($elem);
+                        self.finalize($elem);
                     }
                 }
             );
