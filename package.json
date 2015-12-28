@@ -20,7 +20,7 @@
     "grunt-contrib-cssmin": "^0.14.0",
     "grunt-contrib-less": "^1.1.0",
     "grunt-contrib-uglify": "^0.11.0",
-    "load-grunt-tasks": "^3.3.0",
+    "load-grunt-tasks": "^3.4.0",
     "spinkit": "^1.2.5"
   }
 }
