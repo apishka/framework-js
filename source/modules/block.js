@@ -90,7 +90,7 @@
                     if (!self.isInitialized($elem))
                     {
                         var initialized = $elem.data('jihad-initialized') || {};
-                        initialized[this.getSelector()] = 1;
+                        initialized[self.getSelector()] = 1;
                         $elem.data('jihad-initialized', initialized);
 
                         self.initialize($elem);
