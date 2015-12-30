@@ -28,8 +28,13 @@
 
         JihadBlock.isInitialized = function($target)
         {
-            if ($target.data('jihad-initialized'))
-                return true;
+            var initialized = $target.data('jihad-initialized');
+            if (initialized)
+            {
+                var selector = this.getSelector();
+                if (selector in initialized)
+                    return true;
+            }
 
             return false;
         };
@@ -84,7 +89,9 @@
 
                     if (!self.isInitialized($elem))
                     {
-                        $elem.data('jihad-initialized', 1);
+                        var initialized = $elem.data('jihad-initialized') || {};
+                        initialized[this.getSelector()] = 1;
+                        $elem.data('jihad-initialized', initialized);
 
                         self.initialize($elem);
                         self.applyBindings($elem);

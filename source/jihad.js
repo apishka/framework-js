@@ -23,7 +23,16 @@
             var selector = block.getSelector();
 
             if (selector)
-                JihadCore.blocks[selector] = block;
+            {
+                if (selector in JihadCore.blocks)
+                {
+                    console.log('Selector ' + selector + ' is already registered in other block');
+                }
+                else
+                {
+                    JihadCore.blocks[selector] = block;
+                }
+            }
 
             return this;
         };
