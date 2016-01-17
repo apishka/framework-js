@@ -50,6 +50,7 @@ module.exports = function (grunt) {
                         'source/library/jquery.serialize-object.js',
                         'source/library/jquery.sticky-kit.js',
                         'source/library/jquery.hotkeys.js',
+                        'source/library/jquery.ajaxQueue.js',
 
                         'source/jihad.js',
                         'source/modules/*.js',
