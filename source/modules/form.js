@@ -160,15 +160,21 @@
             {
                 if (data.result.errors)
                 {
+                    $form.trigger('jihad-fail', data);
+
                     this.fail($form, data.result);
                 }
                 else
                 {
+                    $form.trigger('jihad-success', data);
+
                     this.success($form, data.result);
                 }
             }
             else
             {
+                $form.trigger('jihad-fail', data);
+
                 this.errorGlobal(
                     $form,
                     {
@@ -184,6 +190,8 @@
 
         JihadForm.onError = function($form, jqXHR, textStatus, errorThrown)
         {
+            $form.trigger('jihad-fail');
+
             this.errorGlobal(
                 $form,
                 {
