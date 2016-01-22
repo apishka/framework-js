@@ -47,8 +47,9 @@ module.exports = function (grunt) {
                         // Help libraries
                         'node_modules/autosize/dist/autosize.js',
                         'node_modules/dot/doT.js',
-                        'source/library/jquery.serialize-object.js',
-                        'source/library/jquery.sticky-kit.js',
+                        'node_modules/js-cookie/src/js.cookie.js',
+                        'node_modules/form-serializer/jquery.serialize-object.js',
+                        'node_modules/sticky-kit/dist/sticky-kit.js',
                         'source/library/jquery.hotkeys.js',
                         'source/library/jquery.ajaxQueue.js',
 
