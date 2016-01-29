@@ -8,7 +8,7 @@
     "url": "https://github.com/damnedest-rock/jihad-js.git"
   },
   "devDependencies": {
-    "autosize": "^3.0.14",
+    "autosize": "^3.0.15",
     "dot": "^1.0.3",
     "form-serializer": "^2.5.0",
     "grunt": "^0.4.5",
