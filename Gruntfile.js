@@ -13,11 +13,11 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         clean: {
-            JihadJs: 'compile'
+            ApishkaJs: 'compile'
         },
 
         copy: {
-            JihadJs: {
+            ApishkaJs: {
                 expand: true,
                 flatten: true,
                 cwd: markupMain(),
@@ -41,9 +41,9 @@ module.exports = function (grunt) {
             options: {
                 separator: ';'
             },
-            JihadJs: {
+            ApishkaJs: {
                 files: {
-                    'dist/js/jihad-js.js': [
+                    'dist/js/apishka-js.js': [
                         // Help libraries
                         'node_modules/autosize/dist/autosize.js',
                         'node_modules/dot/doT.js',
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                         'source/library/jquery.hotkeys.js',
                         'source/library/jquery.ajaxQueue.js',
 
-                        'source/jihad.js',
+                        'source/apishka.js',
                         'source/modules/*.js',
                         'source/blocks/*/*.js',
                     ]
@@ -62,19 +62,19 @@ module.exports = function (grunt) {
         },
 
         uglify: {
-            JihadJs: {
+            ApishkaJs: {
                 files: {
-                    'dist/js/jihad-js.js': [
-                        'dist/js/jihad-js.js'
+                    'dist/js/apishka-js.js': [
+                        'dist/js/apishka-js.js'
                     ]
                 }
             }
         },
 
         less: {
-            JihadJs: {
+            ApishkaJs: {
                 files: {
-                    'dist/css/jihad-js.css': markupMain('jihad.less')
+                    'dist/css/apishka-js.css': markupMain('apishka.less')
                 }
             }
         },
@@ -83,16 +83,16 @@ module.exports = function (grunt) {
             options: {
                 browsers: ['last 2 versions', 'ie 8', 'ie 9', 'android 2.3', 'android 4', 'opera 12']
             },
-            JihadJs: {
-                src: 'dist/css/jihad-js.css'
+            ApishkaJs: {
+                src: 'dist/css/apishka-js.css'
             }
         },
 
         cssmin: {
-            JihadJs: {
+            ApishkaJs: {
                 files: {
-                    'dist/css/jihad-js.css': [
-                        'dist/css/jihad-js.css'
+                    'dist/css/apishka-js.css': [
+                        'dist/css/apishka-js.css'
                     ]
                 }
             }
