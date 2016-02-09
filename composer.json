@@ -1,6 +1,6 @@
 {
-    "name": "apishka/jihad-js",
-    "keywords": ["jihad", "js"],
+    "name": "apishka/framework-js",
+    "keywords": ["apishka", "framework", "js"],
     "authors": [
         {
             "name": "Evgeny Reykh",
