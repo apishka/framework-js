@@ -208,7 +208,7 @@
                             self.onSuccess(data, textStatus, jqXHR);
 
                             // After do all job we assign bindings
-                            JihadCore.blocksRun(self.getActive());
+                            JihadCore.blocksRun(JihadModal.getActive());
                         },
                         error: function(jqXHR, textStatus, errorThrown)
                         {

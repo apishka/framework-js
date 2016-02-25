@@ -52,9 +52,14 @@
                     var $target = $(parent).filter(selector).add($(selector, parent));
 
                     if ($target.length)
-                        $target.each(function () {
-                            block.run($(this));
-                        });
+                    {
+                        $target.each(
+                            function ()
+                            {
+                                block.run($(this));
+                            }
+                        );
+                    }
                 }
             );
 
