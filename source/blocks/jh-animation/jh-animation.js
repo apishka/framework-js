@@ -36,6 +36,10 @@
 
                         switch (type)
                         {
+                            case 'rotating-plane':
+                                AnimationBlock.initializeRotatingPlane($target);
+                                break;
+
                             case 'double-bounce':
                                 AnimationBlock.initializeDoubleBounce($target);
                                 break;
@@ -139,6 +143,15 @@
                                 '<div class="sk-circle12 sk-circle"></div>'
                             ].join('')
                         );
+                    },
+
+                    /**
+                     * Initialize rotating plane
+                     */
+
+                    initializeRotatingPlane: function($target)
+                    {
+                        $target.addClass('sk-spinner-rotating-plane');
                     }
                 }
             )
