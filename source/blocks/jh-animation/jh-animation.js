@@ -151,7 +151,7 @@
 
                     initializeRotatingPlane: function($target)
                     {
-                        $target.addClass('sk-spinner-rotating-plane');
+                        $target.addClass('sk-rotating-plane');
                     }
                 }
             )
