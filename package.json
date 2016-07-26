@@ -8,7 +8,7 @@
     "url": "https://github.com/apishka/framework-js.git"
   },
   "devDependencies": {
-    "autosize": "^3.0.16",
+    "autosize": "^3.0.17",
     "dot": "^1.0.3",
     "form-serializer": "^2.5.0",
     "grunt": "^1.0.1",
