@@ -56,6 +56,22 @@
                         $target.each(
                             function ()
                             {
+                                if (block.inherit)
+                                {
+                                    $.each(
+                                        block.inherit, function ()
+                                        {
+                                            block = $.extend(
+                                                {},
+                                                JihadCore.blocks[this] || {},
+                                                block
+                                            )
+                
+                                        }
+                                    );
+                                    JihadCore.blocks[selector] = block;
+                                }
+                                
                                 block.run($(this));
                             }
                         );
