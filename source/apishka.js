@@ -71,7 +71,6 @@
                                                 JihadCore.blocks[name] || {},
                                                 block
                                             )
-            
                                         }
                                     );
                                     JihadCore.blocks[selector] = block;
