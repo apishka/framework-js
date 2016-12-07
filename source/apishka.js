@@ -59,14 +59,19 @@
                                 if (block.inherit)
                                 {
                                     $.each(
-                                        block.inherit, function ()
+                                        block.inherit, function (i, name)
                                         {
                                             block = $.extend(
-                                                {},
-                                                JihadCore.blocks[this] || {},
+                                                {
+                                                    super: function (selector)
+                                                    {
+                                                        return JihadCore.blocks[selector || name];
+                                                    }
+                                                },
+                                                JihadCore.blocks[name] || {},
                                                 block
                                             )
-                
+            
                                         }
                                     );
                                     JihadCore.blocks[selector] = block;
