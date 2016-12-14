@@ -31,7 +31,7 @@
                 JihadCore.blocks,
                 function (selector)
                 {
-                    $(selector).trigger(event, props);
+                    $(selector).triggerHandler(event, selector, props);
                 }
             );
         };
