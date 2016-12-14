@@ -102,6 +102,10 @@
                         {
                             return q ? $(self.getSelector() + '-' + q, $elem) : $elem;
                         };
+                        self.sel = function (q)
+                        {
+                            return q ? self.getSelector() + '-' + q : self.getSelector();
+                        };
                         self.initialize($elem);
                         self.applyBindings($elem);
                         self.finalize($elem);
