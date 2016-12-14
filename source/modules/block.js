@@ -4,12 +4,36 @@
         var JihadBlock = window.JihadBlock = {};
         
         /**
-         * Returns main block selector
+         * Returns main block selector and children elements
          */
         
         JihadBlock.getSelector = function ()
         {
             return null;
+        };
+        
+        JihadBlock.sel = function (q)
+        {
+            return q ? this.getSelector() + '-' + q : this.getSelector();
+        };
+        
+        /**
+         * Communication between blocks
+         */
+        
+        JihadBlock.emit = function (event)
+        {
+            if (!event) throw new Error('Event name is not set.');
+            
+            var props = Array.prototype.slice.call(arguments, 1);
+            
+            $.each(
+                JihadCore.blocks,
+                function (selector)
+                {
+                    $(selector).trigger(event, props);
+                }
+            );
         };
         
         /**
@@ -101,10 +125,6 @@
                         self.el = function (q)
                         {
                             return q ? $(self.getSelector() + '-' + q, $elem) : $elem;
-                        };
-                        self.sel = function (q)
-                        {
-                            return q ? self.getSelector() + '-' + q : self.getSelector();
                         };
                         self.initialize($elem);
                         self.applyBindings($elem);
