@@ -25,13 +25,16 @@
         {
             if (!event) throw new Error('Event name is not set.');
             
-            var props = Array.prototype.slice.call(arguments, 1);
+            var props = $.makeArray(arguments).slice(1);
             
             $.each(
                 JihadCore.blocks,
                 function (selector)
                 {
-                    $(selector).triggerHandler(event, selector, props);
+                    var arg = props.slice(0);
+                    
+                    arg.unshift(selector);
+                    $(selector).triggerHandler(event, arg);
                 }
             );
         };
