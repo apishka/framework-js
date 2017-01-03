@@ -12,9 +12,11 @@
             return null;
         };
         
-        JihadBlock.sel = function (q)
+        JihadBlock.sel = function (q, n)
         {
-            return q ? this.getSelector() + '-' + q : this.getSelector();
+            if (typeof q === 'number') return this.getSelector().slice(q);
+
+            return q ? (this.getSelector() + '-' + q).slice(n) : this.getSelector();
         };
         
         /**
