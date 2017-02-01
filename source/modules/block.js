@@ -15,7 +15,7 @@
         JihadBlock.sel = function (q, n)
         {
             if (typeof q === 'number') return this.getSelector().slice(q);
-
+            
             return q ? (this.getSelector() + '-' + q).slice(n) : this.getSelector();
         };
         
@@ -33,10 +33,14 @@
                 JihadCore.blocks,
                 function (selector)
                 {
-                    var arg = props.slice(0);
-                    
-                    arg.unshift(selector);
-                    $(selector).triggerHandler(event, arg);
+                    $(selector).triggerHandler(
+                        $.Event(
+                            event, {
+                                __jihadSelector: selector
+                            }
+                        ),
+                        props
+                    );
                 }
             );
         };
@@ -73,14 +77,34 @@
         
         JihadBlock.applyBindings = function ($target)
         {
+            var block = this;
+            
             $.each(
                 this.getBindings($target),
                 function (index, binding)
                 {
                     $target.on.apply(
                         $target,
-                        binding
+                        [
+                            binding[0],
+                            typeof binding[1] === 'string' ? binding[1] : handler(binding[1]),
+                            binding[2] ? handler(binding[2]) : undefined
+                        ]
                     );
+                    
+                    function handler(prime)
+                    {
+                        return function (e)
+                        {
+                            if (e.__jihadSelector)
+                            {
+                                if (block.getSelector() === e.__jihadSelector)
+                                    prime.apply(block, arguments);
+                            }
+                            else
+                                prime.apply(block, arguments);
+                        }
+                    }
                 }
             );
         };
@@ -109,7 +133,7 @@
         {
             var self = this;
             
-            function _tmp(){}
+            function _tmp() {}
             
             $.each(
                 $target,
