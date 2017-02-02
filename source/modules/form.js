@@ -5,6 +5,13 @@
             lock: null,
             lockSelector: null
         };
+    
+        $(window).on(
+            'beforeunload', function ()
+            {
+                JihadForm.__unloaded = true;
+            }
+        );
 
         /**
          * Returns form action
@@ -171,6 +178,17 @@
                     this.success($form, data.result);
                 }
             }
+            else if (data && data.error)
+            {
+                $form.trigger('jihad-fail', data);
+                
+                this.errorGlobal(
+                    $form,
+                    {
+                        message: data.error
+                    }
+                );
+            }
             else
             {
                 $form.trigger('jihad-fail', data);
@@ -192,12 +210,13 @@
         {
             $form.trigger('jihad-fail');
 
-            this.errorGlobal(
-                $form,
-                {
-                    message: 'Something is wrong'
-                }
-            );
+            if (!JihadForm.__unloaded)
+                this.errorGlobal(
+                    $form,
+                    {
+                        message: 'Something is wrong'
+                    }
+                );
         };
 
         /**
