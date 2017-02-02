@@ -99,10 +99,10 @@
                             if (e.__jihadSelector)
                             {
                                 if (block.getSelector() === e.__jihadSelector)
-                                    prime.apply(block, arguments);
+                                    return prime.apply(this, arguments);
                             }
                             else
-                                prime.apply(block, arguments);
+                                return prime.apply(this, arguments);
                         }
                     }
                 }
