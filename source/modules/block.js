@@ -33,14 +33,19 @@
                 JihadCore.blocks,
                 function (selector)
                 {
-                    $(selector).triggerHandler(
-                        $.Event(
-                            event, {
-                                __jihadSelector: selector
-                            }
-                        ),
-                        props
-                    );
+                    $(selector).each(
+                        function ()
+                        {
+                            $(this).triggerHandler(
+                                $.Event(
+                                    event, {
+                                        __jihadSelector: selector
+                                    }
+                                ),
+                                props
+                            );
+                        }
+                    )
                 }
             );
         };
