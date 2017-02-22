@@ -114,7 +114,7 @@
 
         JihadForm.errorGlobal = function($form, error)
         {
-            alert(error.message);
+            alert(error.code + ': ' + error.message);
         };
 
         /**
@@ -184,9 +184,7 @@
                 
                 this.errorGlobal(
                     $form,
-                    {
-                        message: data.error
-                    }
+                    data.error
                 );
             }
             else
