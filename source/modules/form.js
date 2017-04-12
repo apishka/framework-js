@@ -143,7 +143,7 @@
 
         JihadForm.submitsDisable = function($form)
         {
-            $form.find('[type="submit"]').prop('disabled', true);
+            $form.find('[type="submit"],[role="submit"],[data-role="submit"]').prop('disabled', true);
         };
 
         /**
@@ -152,7 +152,7 @@
 
         JihadForm.submitsEnable = function($form)
         {
-            $form.find('[type="submit"]').prop('disabled', false);
+            $form.find('[type="submit"],[role="submit"],[data-role="submit"]').prop('disabled', false);
         };
 
         /**
