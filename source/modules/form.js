@@ -76,7 +76,7 @@
 
         JihadForm.errorsHide = function($form)
         {
-            $form.find('[role="error"]').hide();
+            $form.find('[data-role="error"],[role="error"]').hide();
         };
 
         /**
@@ -102,7 +102,7 @@
 
         JihadForm.errorShow = function($form, field, error)
         {
-            $form.find('[role="error"][data-field="' + field + '"]')
+            $form.find('[role="error"][data-field="' + field + '"],[data-role="error"][data-field="' + field + '"]')
                 .text(error.message)
                 .show()
             ;
@@ -143,7 +143,7 @@
 
         JihadForm.submitsDisable = function($form)
         {
-            $form.find('[role="submit"]').prop('disabled', true);
+            $form.find('[type="submit"]').prop('disabled', true);
         };
 
         /**
@@ -152,7 +152,7 @@
 
         JihadForm.submitsEnable = function($form)
         {
-            $form.find('[role="submit"]').prop('disabled', false);
+            $form.find('[type="submit"]').prop('disabled', false);
         };
 
         /**
