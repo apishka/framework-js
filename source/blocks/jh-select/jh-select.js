@@ -38,7 +38,7 @@
                                     var label_end    = $placeholder.data('label-end');
                                     var $option      = $select.find('option:selected');
                                     
-                                    if ($option.val())
+                                    if ($option.val() !== '' && $option.val() != 0)
                                         $placeholder.empty().append(
                                             $('<span>', {
                                                 class: 'jh-select__label jh-select__label--start',
@@ -154,7 +154,7 @@
                         
                         options = $('#' + rel[1] + ' option');
                         
-                        if (select.val() === '') return options.attr('disabled', false);
+                        if (select.val() === '' || select.val() == 0) return options.attr('disabled', false);
                         
                         options
                             .attr('disabled', false)
