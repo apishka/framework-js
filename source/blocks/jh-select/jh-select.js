@@ -1,8 +1,8 @@
 (
-    function()
+    function ()
     {
         var SelectBlock = {};
-
+        
         JihadCore.blockRegister(
             $.extend(
                 SelectBlock,
@@ -11,35 +11,52 @@
                     /**
                      * Returns block selector
                      */
-
-                    getSelector: function()
+                    
+                    getSelector: function ()
                     {
                         return '.jh-select';
                     },
-
+                    
                     /**
                      * Returns block bindins
                      */
-
-                    getBindings: function()
+                    
+                    getBindings: function ()
                     {
+                        var self = this;
+                        
                         return [
                             [
                                 'change',
                                 '.jh-select__control',
-                                function()
+                                function ()
                                 {
-                                    var $elem = $(this);
-                                    var $select = $elem.closest('.jh-select');
-                                    var $option = $select.find('option:selected');
-
-                                    $select.find('.jh-select__placeholder').html(
-                                        $option.html()
-                                    );
-
-                                    var $input = $select.find('.jh-select__input');
-                                    if ($input.length)
-                                        $input.val($option.attr('value'));
+                                    var $elem        = $(this);
+                                    var $select      = $elem.closest('.jh-select');
+                                    var $placeholder = $select.find('.jh-select__placeholder');
+                                    var label_start  = $placeholder.data('label-start');
+                                    var label_end    = $placeholder.data('label-end');
+                                    var $option      = $select.find('option:selected');
+                                    
+                                    if ($option.val())
+                                        $placeholder.empty().append(
+                                            $('<span>', {
+                                                class: 'jh-select__label jh-select__label--start',
+                                                html : label_start
+                                            }),
+                                            $('<span>', {
+                                                class: 'jh-select__label',
+                                                html : $option.html()
+                                            }),
+                                            $('<span>', {
+                                                class: 'jh-select__label jh-select__label--end',
+                                                html : label_end
+                                            })
+                                        );
+                                    else
+                                        $select.find('.jh-select__placeholder').html($option.html());
+                                    
+                                    self.setOptionAccess($elem);
                                 }
                             ],
                             [
@@ -47,9 +64,9 @@
                                 '.jh-select__control',
                                 function ()
                                 {
-                                    var $elem = $(this);
+                                    var $elem   = $(this);
                                     var $select = $elem.closest('.jh-select');
-
+                                    
                                     $select.toggleClass('focus', true);
                                 },
                             ],
@@ -58,23 +75,23 @@
                                 '.jh-select__control',
                                 function ()
                                 {
-                                    var $elem = $(this);
+                                    var $elem   = $(this);
                                     var $select = $elem.closest('.jh-select');
-
+                                    
                                     $select.toggleClass('focus', false);
                                 }
                             ],
                             [
                                 'click, focus',
                                 '.jh-select__input',
-                                function()
+                                function ()
                                 {
-                                    var $elem = $(this);
+                                    var $elem   = $(this);
                                     var $select = $elem.closest('.jh-select');
-
+                                    
                                     $select.toggleClass('focus', true);
                                     $elem.toggleClass('m-filled', true);
-
+                                    
                                     var value = parseInt($elem.val().replace(/[^0-9]/g, '')) || 0;
                                     if (value == 0)
                                         $elem.val('');
@@ -83,15 +100,15 @@
                             [
                                 'blur',
                                 '.jh-select__input',
-                                function()
+                                function ()
                                 {
-                                    var $elem = $(this);
+                                    var $elem   = $(this);
                                     var $select = $elem.closest('.jh-select');
-                                    var $label = $select.find('.jh-select__placeholder');
-
+                                    var $label  = $select.find('.jh-select__placeholder');
+                                    
                                     $select.toggleClass('focus', false);
                                     $elem.toggleClass('m-filled', false);
-
+                                    
                                     var value = parseInt($elem.val().replace(/[^0-9]/g, '')) || 0;
                                     if (value == $select.data('default-value'))
                                     {
@@ -101,7 +118,7 @@
                                     {
                                         $select.toggleClass('m-default-value', false);
                                     }
-
+                                    
                                     if ($select.data('default-label'))
                                     {
                                         $label.text(
@@ -120,6 +137,29 @@
                                 }
                             ]
                         ];
+                    },
+                    
+                    setOptionAccess: function (select)
+                    {
+                        var rel = this.el().data('rel');
+                        var options, index, isFrom;
+                        
+                        if (!rel) return;
+                        
+                        index = select.find('option:selected').index();
+                        
+                        rel    = rel.split(':');
+                        isFrom = rel[0] === 'from';
+                        isFrom ? index-- : index++;
+                        
+                        options = $('#' + rel[1] + ' option');
+                        
+                        if (select.val() === '') return options.attr('disabled', false);
+                        
+                        options
+                            .attr('disabled', false)
+                            .eq(index)[isFrom ? 'nextAll' : 'prevAll']()
+                            .attr('disabled', true);
                     }
                 }
             )

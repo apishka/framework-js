@@ -1,0 +1,181 @@
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>jh-select tests</title>
+
+    <link rel="stylesheet" href="../dist/css/apishka-js.css"/>
+
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://searls.github.io/jasmine-all/jasmine-all-min.js"></script>
+    <script src="../dist/js/apishka-js.js"></script>
+</head>
+<body>
+
+    <h1>Beds starts with a label</h1>
+    <table>
+        <tr>
+            <td>
+                <div class="jh-select" data-rel="to:f_max_beds">
+                    <label for="f_min_beds" class="jh-select__placeholder" data-label-start="Beds, from">Beds, from</label>
+                    <select id="f_min_beds" name="f_min_beds" class="jh-select__control">
+                        <option selected="selected" value="">Beds, from</option>
+                        <option value="-1">Studio</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="jh-select" data-rel="from:f_min_beds">
+                    <label for="f_max_beds" class="jh-select__placeholder" data-label-start="to">to</label>
+                    <select id="f_max_beds" name="f_max_beds" class="jh-select__control">
+                        <option selected="selected" value="">to</option>
+                        <option value="-1">Studio</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <h1>Beds without a label</h1>
+    <table>
+        <tr>
+            <td>
+                <div class="jh-select" data-rel="to:f_max_beds1">
+                    <label for="f_min_beds1" class="jh-select__placeholder">Beds, from</label>
+                    <select id="f_min_beds1" name="f_min_beds" class="jh-select__control">
+                        <option selected="selected" value="">Beds, from</option>
+                        <option value="-1">Studio</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="jh-select" data-rel="from:f_min_beds1">
+                    <label for="f_max_beds1" class="jh-select__placeholder">to</label>
+                    <select id="f_max_beds1" name="f_max_beds" class="jh-select__control">
+                        <option selected="selected" value="">to</option>
+                        <option value="-1">Studio</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <h1>Beds without relationship</h1>
+    <table>
+        <tr>
+            <td>
+                <div class="jh-select">
+                    <label for="f_min_beds2" class="jh-select__placeholder">Beds, from</label>
+                    <select id="f_min_beds2" name="f_min_beds" class="jh-select__control">
+                        <option selected="selected" value="">Beds, from</option>
+                        <option value="-1">Studio</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="jh-select">
+                    <label for="f_max_beds2" class="jh-select__placeholder">to</label>
+                    <select id="f_max_beds2" name="f_max_beds" class="jh-select__control">
+                        <option selected="selected" value="">to</option>
+                        <option value="-1">Studio</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <h1>Another an example</h1>
+
+    <table>
+        <tr>
+            <td>
+                <div class="jh-select" data-rel="to:price_buy_max">
+                    <label class="jh-select__placeholder" for="price_buy_min" data-label-start="From">Price, from</label>
+                    <select id="price_buy_min" class="jh-select__control" name="price_buy_min">
+                        <option value="1000">1 000 AED</option>
+                        <option value="2000">2 000 AED</option>
+                        <option value="3000">3 000 AED</option>
+                        <option value="4000">4 000 AED</option>
+                        <option value="5000">5 000 AED</option>
+                        <option value="6000">6 000 AED</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="jh-select" data-rel="from:price_buy_min">
+                    <label class="jh-select__placeholder" for="price_buy_max" data-label-start="to" data-label-end="per year">to, AED per year</label>
+                    <select id="price_buy_max" class="jh-select__control" name="price_buy_max">
+                        <option value="1000">1 000 AED</option>
+                        <option value="2000">2 000 AED</option>
+                        <option value="3000">3 000 AED</option>
+                        <option value="4000">4 000 AED</option>
+                        <option value="5000">5 000 AED</option>
+                        <option value="6000">6 000 AED</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <script src="all.js"></script>
+    <script>
+        JihadCore.blocksRun();
+    </script>
+</body>
+</html>
