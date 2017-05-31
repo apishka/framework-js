@@ -152,7 +152,7 @@
                         isFrom = rel[0] === 'from';
                         isFrom ? index-- : index++;
                         
-                        options = $('#' + rel[1] + ' option');
+                        options = $('#' + rel[1] + ':visible option');
                         
                         if (select.val() === '' || select.val() == 0) return options.attr('disabled', false);
                         
