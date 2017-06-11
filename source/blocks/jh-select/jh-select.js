@@ -150,7 +150,9 @@
                         
                         rel    = rel.split(':');
                         isFrom = rel[0] === 'from';
-                        isFrom ? index-- : index++;
+    
+                        if (!this.el().data('equality'))
+                            isFrom ? index-- : index++;
                         
                         options = $('#' + rel[1] + ':visible option');
                         
