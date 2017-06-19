@@ -27,7 +27,55 @@
             <button class="block4-change-data-unobtrusive">Change value</button>
             <h3 class="block4-model" data-model="text:varName2"></h3>
         </div>
+    </div>
 
+    <div class="block5">
+        <h3>Model for selects</h3>
+
+        <table>
+            <tr>
+                <td>
+                    <div class="jh-select m-default-value">
+                        <label class="jh-select__placeholder" for="f_min_beds">
+                            <span class="jh-select__label">Beds, from</span>
+                        </label>
+                        <select data-model="val:valSelects" class="jh-select__control block5-model" name="f_min_beds" id="f_min_beds">
+                            <option value="" selected="selected">Beds, from</option>
+                            <option value="-1">Studio</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <select class="block5-model" data-model="val:valSelects" name="">
+                        <option value="-1">Studio</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </td>
+                <td>
+                    <input class="block5-model" data-model="prop:checked:valSelects" type="checkbox" name=""/>
+                </td>
+                <td>
+                    <input class="block5-model" data-model="val:valSelects" type="text"/>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <script src="all.js"></script>

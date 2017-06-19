@@ -437,3 +437,48 @@
         )
     );
 }();
+
+/* Block5
+ ================================================== */
+
+!function ()
+{
+    var Module = {};
+    
+    JihadCore.blockRegister(
+        $.extend(
+            Module,
+            JihadBlock,
+            {
+                /**
+                 * Returns block selector
+                 */
+                
+                getSelector: function ()
+                {
+                    return '.block5';
+                },
+                
+                /**
+                 * Returns block bindins
+                 */
+                
+                getBindings: function ()
+                {
+                    var self = this;
+                    
+                    return [];
+                },
+                
+                initialize: function ()
+                {
+                    var self = this;
+                    
+                    JihadModel.init(this);
+                    
+                    
+                }
+            }
+        )
+    );
+}();

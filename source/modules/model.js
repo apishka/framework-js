@@ -28,11 +28,20 @@
                         {
                             var it     = $(this);
                             var action = it.data('model').split(':');
+                            var val    = value;
+                            
+                            if (it.is(':checkbox') || it.is(':radio'))
+                                val = !!+val;
                             
                             if (action.length === 3)
-                                it[action[0]](action[1], value);
+                                it[action[0]](action[1], val);
                             else
-                                it[action[0]](value);
+                                it[action[0]](val);
+                            
+                            if (it.is('select') && !it.find('option[value="' + val + '"]').length)
+                                it.val(it.find('option:first').val());
+                            
+                            it.trigger('change');
                         }
                     );
                     

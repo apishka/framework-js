@@ -1,2 +1,3478 @@
-!function(a,b){if("function"==typeof define&&define.amd)define(["exports","module"],b);else if("undefined"!=typeof exports&&"undefined"!=typeof module)b(exports,module);else{var c={exports:{}};b(c.exports,c),a.autosize=c.exports}}(this,function(a,b){"use strict";function c(a){function b(b){var c=a.style.width;a.style.width="0px",a.offsetWidth,a.style.width=c,a.style.overflowY=b}function c(a){for(var b=[];a&&a.parentNode&&a.parentNode instanceof Element;)a.parentNode.scrollTop&&b.push({node:a.parentNode,scrollTop:a.parentNode.scrollTop}),a=a.parentNode;return b}function d(){var b=a.style.height,d=c(a),e=document.documentElement&&document.documentElement.scrollTop;a.style.height="auto";var f=a.scrollHeight+h;if(0===a.scrollHeight)return void(a.style.height=b);a.style.height=f+"px",i=a.clientWidth,d.forEach(function(a){a.node.scrollTop=a.scrollTop}),e&&(document.documentElement.scrollTop=e)}function e(){d();var c=Math.round(parseFloat(a.style.height)),e=window.getComputedStyle(a,null),f="content-box"===e.boxSizing?Math.round(parseFloat(e.height)):a.offsetHeight;if(f!==c?"hidden"===e.overflowY&&(b("scroll"),d(),f="content-box"===e.boxSizing?Math.round(parseFloat(window.getComputedStyle(a,null).height)):a.offsetHeight):"hidden"!==e.overflowY&&(b("hidden"),d(),f="content-box"===e.boxSizing?Math.round(parseFloat(window.getComputedStyle(a,null).height)):a.offsetHeight),j!==f){j=f;var h=g("autosize:resized");try{a.dispatchEvent(h)}catch(a){}}}if(a&&a.nodeName&&"TEXTAREA"===a.nodeName&&!f.has(a)){var h=null,i=a.clientWidth,j=null,k=function(){a.clientWidth!==i&&e()},l=function(b){window.removeEventListener("resize",k,!1),a.removeEventListener("input",e,!1),a.removeEventListener("keyup",e,!1),a.removeEventListener("autosize:destroy",l,!1),a.removeEventListener("autosize:update",e,!1),Object.keys(b).forEach(function(c){a.style[c]=b[c]}),f.delete(a)}.bind(a,{height:a.style.height,resize:a.style.resize,overflowY:a.style.overflowY,overflowX:a.style.overflowX,wordWrap:a.style.wordWrap});a.addEventListener("autosize:destroy",l,!1),"onpropertychange"in a&&"oninput"in a&&a.addEventListener("keyup",e,!1),window.addEventListener("resize",k,!1),a.addEventListener("input",e,!1),a.addEventListener("autosize:update",e,!1),a.style.overflowX="hidden",a.style.wordWrap="break-word",f.set(a,{destroy:l,update:e}),function(){var b=window.getComputedStyle(a,null);"vertical"===b.resize?a.style.resize="none":"both"===b.resize&&(a.style.resize="horizontal"),h="content-box"===b.boxSizing?-(parseFloat(b.paddingTop)+parseFloat(b.paddingBottom)):parseFloat(b.borderTopWidth)+parseFloat(b.borderBottomWidth),isNaN(h)&&(h=0),e()}()}}function d(a){var b=f.get(a);b&&b.destroy()}function e(a){var b=f.get(a);b&&b.update()}var f="function"==typeof Map?new Map:function(){var a=[],b=[];return{has:function(b){return a.indexOf(b)>-1},get:function(c){return b[a.indexOf(c)]},set:function(c,d){-1===a.indexOf(c)&&(a.push(c),b.push(d))},delete:function(c){var d=a.indexOf(c);d>-1&&(a.splice(d,1),b.splice(d,1))}}}(),g=function(a){return new Event(a,{bubbles:!0})};try{new Event("test")}catch(a){g=function(a){var b=document.createEvent("Event");return b.initEvent(a,!0,!1),b}}var h=null;"undefined"==typeof window||"function"!=typeof window.getComputedStyle?(h=function(a){return a},h.destroy=function(a){return a},h.update=function(a){return a}):(h=function(a,b){return a&&Array.prototype.forEach.call(a.length?a:[a],function(a){return c(a)}),a},h.destroy=function(a){return a&&Array.prototype.forEach.call(a.length?a:[a],d),a},h.update=function(a){return a&&Array.prototype.forEach.call(a.length?a:[a],e),a}),b.exports=h}),function(){"use strict";function a(b,c,d){return("string"==typeof c?c:c.toString()).replace(b.define||f,function(a,c,e,f){return 0===c.indexOf("def.")&&(c=c.substring(4)),c in d||(":"===e?(b.defineParams&&f.replace(b.defineParams,function(a,b,e){d[c]={arg:b,text:e}}),c in d||(d[c]=f)):new Function("def","def['"+c+"']="+f)(d)),""}).replace(b.use||f,function(c,e){b.useParams&&(e=e.replace(b.useParams,function(a,b,c,e){if(d[c]&&d[c].arg&&e){var f=(c+":"+e).replace(/'|\\/g,"_");return d.__exp=d.__exp||{},d.__exp[f]=d[c].text.replace(new RegExp("(^|[^\\w$])"+d[c].arg+"([^\\w$])","g"),"$1"+e+"$2"),b+"def.__exp['"+f+"']"}}));var f=new Function("def","return "+e)(d);return f?a(b,f,d):f})}function b(a){return a.replace(/\\('|\\)/g,"$1").replace(/[\r\t\n]/g," ")}var c,d={name:"doT",version:"1.1.1",templateSettings:{evaluate:/\{\{([\s\S]+?(\}?)+)\}\}/g,interpolate:/\{\{=([\s\S]+?)\}\}/g,encode:/\{\{!([\s\S]+?)\}\}/g,use:/\{\{#([\s\S]+?)\}\}/g,useParams:/(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,define:/\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,defineParams:/^\s*([\w$]+):([\s\S]+)/,conditional:/\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,iterate:/\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,varname:"it",strip:!0,append:!0,selfcontained:!1,doNotSkipEncoded:!1},template:void 0,compile:void 0,log:!0};d.encodeHTMLSource=function(a){var b={"&":"&#38;","<":"&#60;",">":"&#62;",'"':"&#34;","'":"&#39;","/":"&#47;"},c=a?/[&<>"'\/]/g:/&(?!#?\w+;)|<|>|"|'|\//g;return function(a){return a?a.toString().replace(c,function(a){return b[a]||a}):""}},c=function(){return this||(0,eval)("this")}(),"undefined"!=typeof module&&module.exports?module.exports=d:"function"==typeof define&&define.amd?define(function(){return d}):c.doT=d;var e={append:{start:"'+(",end:")+'",startencode:"'+encodeHTML("},split:{start:"';out+=(",end:");out+='",startencode:"';out+=encodeHTML("}},f=/$^/;d.template=function(g,h,i){h=h||d.templateSettings;var j,k,l=h.append?e.append:e.split,m=0,n=h.use||h.define?a(h,g,i||{}):g;n=("var out='"+(h.strip?n.replace(/(^|\r|\n)\t* +| +\t*(\r|\n|$)/g," ").replace(/\r|\n|\t|\/\*[\s\S]*?\*\//g,""):n).replace(/'|\\/g,"\\$&").replace(h.interpolate||f,function(a,c){return l.start+b(c)+l.end}).replace(h.encode||f,function(a,c){return j=!0,l.startencode+b(c)+l.end}).replace(h.conditional||f,function(a,c,d){return c?d?"';}else if("+b(d)+"){out+='":"';}else{out+='":d?"';if("+b(d)+"){out+='":"';}out+='"}).replace(h.iterate||f,function(a,c,d,e){return c?(m+=1,k=e||"i"+m,c=b(c),"';var arr"+m+"="+c+";if(arr"+m+"){var "+d+","+k+"=-1,l"+m+"=arr"+m+".length-1;while("+k+"<l"+m+"){"+d+"=arr"+m+"["+k+"+=1];out+='"):"';} } out+='"}).replace(h.evaluate||f,function(a,c){return"';"+b(c)+"out+='"})+"';return out;").replace(/\n/g,"\\n").replace(/\t/g,"\\t").replace(/\r/g,"\\r").replace(/(\s|;|\}|^|\{)out\+='';/g,"$1").replace(/\+''/g,""),j&&(h.selfcontained||!c||c._encodeHTML||(c._encodeHTML=d.encodeHTMLSource(h.doNotSkipEncoded)),n="var encodeHTML = typeof _encodeHTML !== 'undefined' ? _encodeHTML : ("+d.encodeHTMLSource.toString()+"("+(h.doNotSkipEncoded||"")+"));"+n);try{return new Function(h.varname,n)}catch(a){throw"undefined"!=typeof console&&console.log("Could not create a template function: "+n),a}},d.compile=function(a,b){return d.template(a,null,b)}}(),function(a){var b=!1;if("function"==typeof define&&define.amd&&(define(a),b=!0),"object"==typeof exports&&(module.exports=a(),b=!0),!b){var c=window.Cookies,d=window.Cookies=a();d.noConflict=function(){return window.Cookies=c,d}}}(function(){function a(){for(var a=0,b={};a<arguments.length;a++){var c=arguments[a];for(var d in c)b[d]=c[d]}return b}function b(c){function d(b,e,f){var g;if("undefined"!=typeof document){if(arguments.length>1){if(f=a({path:"/"},d.defaults,f),"number"==typeof f.expires){var h=new Date;h.setMilliseconds(h.getMilliseconds()+864e5*f.expires),f.expires=h}f.expires=f.expires?f.expires.toUTCString():"";try{g=JSON.stringify(e),/^[\{\[]/.test(g)&&(e=g)}catch(a){}e=c.write?c.write(e,b):encodeURIComponent(String(e)).replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g,decodeURIComponent),b=encodeURIComponent(String(b)),b=b.replace(/%(23|24|26|2B|5E|60|7C)/g,decodeURIComponent),b=b.replace(/[\(\)]/g,escape);var i="";for(var j in f)f[j]&&(i+="; "+j,!0!==f[j]&&(i+="="+f[j]));return document.cookie=b+"="+e+i}b||(g={});for(var k=document.cookie?document.cookie.split("; "):[],l=0;l<k.length;l++){var m=k[l].split("="),n=m.slice(1).join("=");'"'===n.charAt(0)&&(n=n.slice(1,-1));try{var o=m[0].replace(/(%[0-9A-Z]{2})+/g,decodeURIComponent);if(n=c.read?c.read(n,o):c(n,o)||n.replace(/(%[0-9A-Z]{2})+/g,decodeURIComponent),this.json)try{n=JSON.parse(n)}catch(a){}if(b===o){g=n;break}b||(g[o]=n)}catch(a){}}return g}}return d.set=d,d.get=function(a){return d.call(d,a)},d.getJSON=function(){return d.apply({json:!0},[].slice.call(arguments))},d.defaults={},d.remove=function(b,c){d(b,"",a(c,{expires:-1}))},d.withConverter=b,d}return b(function(){})}),function(a,b){if("function"==typeof define&&define.amd)define(["exports","jquery"],function(a,c){return b(a,c)});else if("undefined"!=typeof exports){var c=require("jquery");b(exports,c)}else b(a,a.jQuery||a.Zepto||a.ender||a.$)}(this,function(a,b){function c(a,c){function e(a,b,c){return a[b]=c,a}function f(a,b){for(var c,f=a.match(d.key);void 0!==(c=f.pop());)if(d.push.test(c)){var h=g(a.replace(/\[\]$/,""));b=e([],h,b)}else d.fixed.test(c)?b=e([],c,b):d.named.test(c)&&(b=e({},c,b));return b}function g(a){return void 0===n[a]&&(n[a]=0),n[a]++}function h(a){switch(b('[name="'+a.name+'"]',c).attr("type")){case"checkbox":return"on"===a.value||a.value;default:return a.value}}function i(b){if(!d.validate.test(b.name))return this;var c=f(b.name,h(b));return m=a.extend(!0,m,c),this}function j(b){if(!a.isArray(b))throw new Error("formSerializer.addPairs expects an Array");for(var c=0,d=b.length;c<d;c++)this.addPair(b[c]);return this}function k(){return m}function l(){return JSON.stringify(k())}var m={},n={};this.addPair=i,this.addPairs=j,this.serialize=k,this.serializeJSON=l}var d={validate:/^[a-z_][a-z0-9_]*(?:\[(?:\d*|[a-z0-9_]+)\])*$/i,key:/[a-z0-9_]+|(?=\[\])/gi,push:/^$/,fixed:/^\d+$/,named:/^[a-z0-9_]+$/i};return c.patterns=d,c.serializeObject=function(){return new c(b,this).addPairs(this.serializeArray()).serialize()},c.serializeJSON=function(){return new c(b,this).addPairs(this.serializeArray()).serializeJSON()},void 0!==b.fn&&(b.fn.serializeObject=c.serializeObject,b.fn.serializeJSON=c.serializeJSON),a.FormSerializer=c,c}),function(){var a,b;a=this.jQuery||window.jQuery,b=a(window),a.fn.stick_in_parent=function(c){var d,e,f,g,h,i,j,k,l,m,n,o,p;for(null==c&&(c={}),m=c.sticky_class,g=c.inner_scrolling,l=c.recalc_every,k=c.parent,i=c.offset_top,h=c.spacer,f=c.bottoming,null==i&&(i=0),null==k&&(k=void 0),null==g&&(g=!0),null==m&&(m="is_stuck"),d=a(document),null==f&&(f=!0),j=function(a){var b,c;return window.getComputedStyle?(a[0],b=window.getComputedStyle(a[0]),c=parseFloat(b.getPropertyValue("width"))+parseFloat(b.getPropertyValue("margin-left"))+parseFloat(b.getPropertyValue("margin-right")),"border-box"!==b.getPropertyValue("box-sizing")&&(c+=parseFloat(b.getPropertyValue("border-left-width"))+parseFloat(b.getPropertyValue("border-right-width"))+parseFloat(b.getPropertyValue("padding-left"))+parseFloat(b.getPropertyValue("padding-right"))),c):a.outerWidth(!0)},n=function(c,e,n,o,p,q,r,s){var t,u,v,w,x,y,z,A,B,C,D,E;if(!c.data("sticky_kit")){if(c.data("sticky_kit",!0),x=d.height(),z=c.parent(),null!=k&&(z=z.closest(k)),!z.length)throw"failed to find stick parent";if(v=!1,t=!1,D=null!=h?h&&c.closest(h):a("<div />"),D&&D.css("position",c.css("position")),A=function(){var a,b,f;if(!s)return x=d.height(),a=parseInt(z.css("border-top-width"),10),b=parseInt(z.css("padding-top"),10),e=parseInt(z.css("padding-bottom"),10),n=z.offset().top+a+b,o=z.height(),v&&(v=!1,t=!1,null==h&&(c.insertAfter(D),D.detach()),c.css({position:"",top:"",width:"",bottom:""}).removeClass(m),f=!0),p=c.offset().top-(parseInt(c.css("margin-top"),10)||0)-i,q=c.outerHeight(!0),r=c.css("float"),D&&D.css({width:j(c),height:q,display:c.css("display"),"vertical-align":c.css("vertical-align"),float:r}),f?E():void 0},A(),q!==o)return w=void 0,y=i,C=l,E=function(){var a,j,k,u,B,E;if(!s)return k=!1,null!=C&&(C-=1)<=0&&(C=l,A(),k=!0),k||d.height()===x||(A(),k=!0),u=b.scrollTop(),null!=w&&(j=u-w),w=u,v?(f&&(B=u+q+y>o+n,t&&!B&&(t=!1,c.css({position:"fixed",bottom:"",top:y}).trigger("sticky_kit:unbottom"))),u<p&&(v=!1,y=i,null==h&&("left"!==r&&"right"!==r||c.insertAfter(D),D.detach()),a={position:"",width:"",top:""},c.css(a).removeClass(m).trigger("sticky_kit:unstick")),g&&(E=b.height(),q+i>E&&(t||(y-=j,y=Math.max(E-q,y),y=Math.min(i,y),v&&c.css({top:y+"px"}))))):u>p&&(v=!0,a={position:"fixed",top:y},a.width="border-box"===c.css("box-sizing")?c.outerWidth()+"px":c.width()+"px",c.css(a).addClass(m),null==h&&(c.after(D),"left"!==r&&"right"!==r||D.append(c)),c.trigger("sticky_kit:stick")),v&&f&&(null==B&&(B=u+q+y>o+n),!t&&B)?(t=!0,"static"===z.css("position")&&z.css({position:"relative"}),c.css({position:"absolute",bottom:e,top:"auto"}).trigger("sticky_kit:bottom")):void 0},B=function(){return A(),E()},u=function(){if(s=!0,b.off("touchmove",E),b.off("scroll",E),b.off("resize",B),a(document.body).off("sticky_kit:recalc",B),c.off("sticky_kit:detach",u),c.removeData("sticky_kit"),c.css({position:"",bottom:"",top:"",width:""}),z.position("position",""),v)return null==h&&("left"!==r&&"right"!==r||c.insertAfter(D),D.remove()),c.removeClass(m)},b.on("touchmove",E),b.on("scroll",E),b.on("resize",B),a(document.body).on("sticky_kit:recalc",B),c.on("sticky_kit:detach",u),setTimeout(E,0)}},o=0,p=this.length;o<p;o++)e=this[o],n(a(e));return this}}.call(this),function(a){function b(b){if("string"==typeof b.data&&(b.data={keys:b.data}),b.data&&b.data.keys&&"string"==typeof b.data.keys){var c=b.handler,d=b.data.keys.toLowerCase().split(" ");b.handler=function(b){if(this===b.target||!(a.hotkeys.options.filterInputAcceptingElements&&a.hotkeys.textInputTypes.test(b.target.nodeName)||a.hotkeys.options.filterContentEditable&&a(b.target).attr("contenteditable")||a.hotkeys.options.filterTextInputs&&a.inArray(b.target.type,a.hotkeys.textAcceptingInputTypes)>-1)){var e="keypress"!==b.type&&a.hotkeys.specialKeys[b.which],f=String.fromCharCode(b.which).toLowerCase(),g="",h={};a.each(["alt","ctrl","shift"],function(a,c){b[c+"Key"]&&e!==c&&(g+=c+"+")}),b.metaKey&&!b.ctrlKey&&"meta"!==e&&(g+="meta+"),b.metaKey&&"meta"!==e&&g.indexOf("alt+ctrl+shift+")>-1&&(g=g.replace("alt+ctrl+shift+","hyper+")),e?h[g+e]=!0:(h[g+f]=!0,h[g+a.hotkeys.shiftNums[f]]=!0,"shift+"===g&&(h[a.hotkeys.shiftNums[f]]=!0));for(var i=0,j=d.length;i<j;i++)if(h[d[i]])return c.apply(this,arguments)}}}}a.hotkeys={version:"0.8",specialKeys:{8:"backspace",9:"tab",10:"return",13:"return",16:"shift",17:"ctrl",18:"alt",19:"pause",20:"capslock",27:"esc",32:"space",33:"pageup",34:"pagedown",35:"end",36:"home",37:"left",38:"up",39:"right",40:"down",45:"insert",46:"del",59:";",61:"=",96:"0",97:"1",98:"2",99:"3",100:"4",101:"5",102:"6",103:"7",104:"8",105:"9",106:"*",107:"+",109:"-",110:".",111:"/",112:"f1",113:"f2",114:"f3",115:"f4",116:"f5",117:"f6",118:"f7",119:"f8",120:"f9",121:"f10",122:"f11",123:"f12",144:"numlock",145:"scroll",173:"-",186:";",187:"=",188:",",189:"-",190:".",191:"/",192:"`",219:"[",220:"\\",221:"]",222:"'"},shiftNums:{"`":"~",1:"!",2:"@",3:"#",4:"$",5:"%",6:"^",7:"&",8:"*",9:"(",0:")","-":"_","=":"+",";":": ","'":'"',",":"<",".":">","/":"?","\\":"|"},textAcceptingInputTypes:["text","password","number","email","url","range","date","month","week","time","datetime","datetime-local","search","color","tel"],textInputTypes:/textarea|input|select/i,options:{filterInputAcceptingElements:!0,filterTextInputs:!0,filterContentEditable:!0}},a.each(["keydown","keyup","keypress"],function(){a.event.special[this]={add:b}})}(jQuery||this.jQuery||window.jQuery),function(a){var b=a({});a.ajaxQueue=function(c){function d(b){e=a.ajax(c),e.done(f.resolve).fail(f.reject).then(b,b)}var e,f=a.Deferred(),g=f.promise();return b.queue(d),g.abort=function(h){if(e)return e.abort(h);var i=b.queue(),j=a.inArray(d,i);return j>-1&&i.splice(j,1),f.rejectWith(c.context||c,[g,h,""]),g},g}}(jQuery),function(){var a=window.JihadCore={$win:$(window),$doc:$(document),$html:$("html"),$body:$("body")};a.blocks={},a.blockRegister=function(b){var c=b.getSelector();return c&&(c in a.blocks?console.log("Selector "+c+" is already registered in other block"):a.blocks[c]=b),this},a.blocksRun=function(b){var c=b||document;return $.each(a.blocks,function(b,d){var e=$(c).filter(b).add($(b,c));e.length&&e.each(function(){d.inherit&&($.each(d.inherit,function(b,c){d=$.extend({super:function(b){return a.blocks[b||c]}},a.blocks[c]||{},d)}),a.blocks[b]=d),d.run($(this))})}),this},a.isDefined=function(a){return null!=a};var b={};a.data=function(a,c){if(arguments.length<2)return b[a];b[a]=c},a.throttle=function(a,b){function c(){e=this,f=arguments,g?h=!0:(a.apply(e,f),g=setTimeout(function(){g=null,h&&(h=!1,c.apply(e,f))},b))}function d(){h=!1}var e,f,g=null,h=!1;return c.reset=d,c}}(),function(){var a=window.JihadBlock={};a.getSelector=function(){return null},a.sel=function(a,b){return"number"==typeof a?this.getSelector().slice(a):a?(this.getSelector()+"-"+a).slice(b):this.getSelector()},a.emit=function(a){if(!a)throw new Error("Event name is not set.");var b=$.makeArray(arguments).slice(1);$.each(JihadCore.blocks,function(c){$(c).each(function(){$(this).triggerHandler($.Event(a,{__jihadSelector:c}),b)})})},a.getBindings=function(){return[]},a.isInitialized=function(a){var b=a.data("jihad-initialized");if(b){if(this.getSelector()in b)return!0}return!1},a.applyBindings=function(a){var b=this;$.each(this.getBindings(a),function(c,d){function e(a){return function(c){return c.__jihadSelector?b.getSelector()===c.__jihadSelector?a.apply(this,arguments):void 0:a.apply(this,arguments)}}a.on.apply(a,[d[0],"string"==typeof d[1]?d[1]:e(d[1]),d[2]?e(d[2]):void 0])})},a.initialize=function(a){},a.finalize=function(a){},a.run=function(a){function b(){}var c=this;$.each(a,function(){var a=$(this);if(b.prototype=c,c=new b,b.prototype=null,!c.isInitialized(a)){var d=a.data("jihad-initialized")||{};d[c.getSelector()]=1,a.data("jihad-initialized",d),c.el=function(b){return b?$(c.getSelector()+"-"+b,a):a},c.initialize(a),c.applyBindings(a),c.finalize(a)}})}}(),function(){var a=window.JihadForm={lock:null,lockSelector:null};$(window).on("beforeunload",function(){a.__unloaded=!0}),a.getAction=function(a){return a.attr("action")},a.getMethod=function(a){return a.attr("method")||"POST"},a.getData=function(a){return a.serialize()},a.getLock=function(){return null===this.lock&&(this.lock=this.createLock()),this.lock},a.getLockSelector=function(){return this.lockSelector},a.createLock=function(){return new JihadLock(this.getLockSelector())},a.errorsHide=function(a){a.find('[data-role="error"],[role="error"]').hide()},a.errorsShow=function(a,b){var c=this;$.each(b,function(b,d){c.errorShow(a,b,d)})},a.errorShow=function(a,b,c){a.find('[role="error"][data-field="'+b+'"],[data-role="error"][data-field="'+b+'"]').text(c.message).show()},a.errorGlobal=function(a,b){alert(b.code?b.code+": "+b.message:b.message)},a.beforeSend=function(a){this.submitsDisable(a),this.getLock().lock(a)},a.afterSend=function(a){this.submitsEnable(a),this.getLock().unlock(a)},a.submitsDisable=function(a){a.find('[type="submit"],[role="submit"],[data-role="submit"]').prop("disabled",!0)},a.submitsEnable=function(a){a.find('[type="submit"],[role="submit"],[data-role="submit"]').prop("disabled",!1)},a.onSuccess=function(a,b,c,d){this.errorsHide(a),b&&b.result?b.result.errors?(a.trigger("jihad-fail",b),this.fail(a,b.result)):(a.trigger("jihad-success",b),this.success(a,b.result)):b&&b.error?(a.trigger("jihad-fail",b),this.errorGlobal(a,b.error)):(a.trigger("jihad-fail",b),this.errorGlobal(a,{message:"Something is wrong"}))},a.onError=function(b,c,d,e){b.trigger("jihad-fail"),a.__unloaded||this.errorGlobal(b,{message:"Something is wrong"})},a.fail=function(a,b){this.errorsShow(a,b.errors)},a.success=function(a,b){},a.submit=function(a){var b=this,c=$(a);return!this.getLock().isLocked(c)&&($.ajax(this.getAction(c),{beforeSend:function(){b.beforeSend(c)},complete:function(){b.afterSend(c)},dataType:"json",data:this.getData(c),type:this.getMethod(c),success:function(a,d,e){b.onSuccess(c,a,d,e)},error:function(a,d,e){b.onError(c,a,d,e)}}),!1)}}(),function(){window.JihadLock=function(a){this._toggle_selector=a||".js-lock-toggle",this.getToggleSelector=function(a){return this._toggle_selector},this.isLocked=function(a){return!!a.data("jihad-locked")},this.lock=function(a){a.data("jihad-locked",1),this.afterLock(a)},this.afterLock=function(a){a.find(this.getToggleSelector(a)).toggleClass("hidden")},this.unlock=function(a){a.data("jihad-locked",0),this.afterUnlock(a)},this.afterUnlock=function(a){a.find(this.getToggleSelector(a)).toggleClass("hidden")}}}(),function(){var a=window.JihadModal={$active:null,tpl:"modal",preprocess:!0};a.getTpl=function(){return this.tpl},a.getUrl=function(){return null},a.preprocessUrl=function(){var a=this.getUrl();if(a&&this.preprocess){var b=JihadUrl.parse(a,!0);b.pathname+=".json",b.search=b.query,b.search.layouts=["layout_content"],a=JihadUrl.make(b)}return a},a.getData=function(){return{}},a.getMethod=function(){return"POST"},a.beforeSend=function(){},a.afterSend=function(){},a.getActive=function(){return this.$active},a.onSuccess=function(a,b,c){a&&a.result?a.result.errors?this.fail(a.result):(this.successLayout(a.result),this.success(a.result)):this.errorGlobal({message:"Something is wrong"})},a.onError=function(a,b,c){this.errorGlobal({message:"Something is wrong"})},a.fail=function(a){this.errorGlobal({message:"Something is wrong"})},a.success=function(b){a.getActive().modal("show")},a.successLayout=function(b){a.getActive().find(".modal-content").html(b.layouts.layout_content)},a.errorGlobal=function(a){alert(a.message)},a.show=function(b){a.getActive()&&a.getActive().remove(),a.$active=JihadTpl.html(this.getTpl(),b||{}),JihadCore.$body.append(a.getActive());var c=this.preprocessUrl();if(c){var d=this;$.ajax(c,{beforeSend:function(){d.beforeSend()},complete:function(){d.afterSend()},dataType:"json",data:this.getData(),type:this.getMethod(),success:function(b,c,e){d.onSuccess(b,c,e),JihadCore.blocksRun(a.getActive())},error:function(a,b,c){d.onError(a,b,c)}})}else this.success({}),JihadCore.blocksRun(a.getActive());return!1},a.hide=function(){a.getActive().modal("hide")}}(),function(){var a=window.JihadModel={};a.model=function(a){var b=this;return this._model=a||this._model,{get:function(a){return a?b._model[a]:b._model},set:function(a,c){var d=$(b.sel("model")+'[data-model$=":'+a+'"]'),e=b._model[a];b._model[a]=c,d.each(function(){var a=$(this),b=a.data("model").split(":");3===b.length?a[b[0]](b[1],c):a[b[0]](c)}),b.el().trigger("model:change",[a,e,c])},apply:function(){$.each(b._model,function(a,c){b.model().set(a,c)}),b.el().trigger("model:applied")},toParams:function(){return $.param(b._model)},serialize:function(){return JSON.stringify(b._model)}}},a.init=function(b){b.model||(b._model={},b.model=a.model,b.el().on("input",b.sel("model")+"[data-model]",function(){var a=$(this),c=a.data("model").split(":");c=c[c.length-1],b.model().set(c,this.value)}))}}(),function(){var a=window.JihadRowUpdater={container:null,data:{}};a.id=function(a){return a},a.run=function(){var a=$(this.container),b=this;$.each(this.data,function(c,d){var e=a.find("#"+b.id(c));e.length?d?(e.replaceWith(d),JihadCore.blocksRun(e)):e.remove():a.prepend(d)})}}(),function(){var a=window.JihadTpl={};["evaluate","interpolate","encode","use","define","conditional","iterate"].forEach(function(a){var b=this[a],c=b.source.replace(/\\{\\{/g,"\\[\\[").replace(/\\}\\}/g,"\\]\\]"),d=(b.global?"g":"")+(b.multiline?"m":"")+(b.ignoreCase?"i":"");this[a]=new RegExp(c,d)},doT.templateSettings),a.TPL_PREFIX="tpl-",a.cache={},a.helpers={params:function(a){return JSON.stringify(a)},include:function(b,c){return a.html(b,c)}},a.push=function(b,c){return a.cache[b]=doT.compile(c)},a.get=function(b){var c,d;return b&&void 0===(d=a.cache[b])&&(c=$("#"+a.TPL_PREFIX+b),d=c.length?a.push(b,c.html().trim()):a.cache[b]=null),d||null},a.text=function(b,c){var d=a.get(b);return d?d(c||{}):""},a.html=function(b,c){return $(a.text(b,c))}}(),function(){window.JihadUrl=function(a,b){function c(a,b){var c=null;return a&&(a=n(a),c=v.exec(a)),c&&(c={href:a,protocol:c[1],host:c[2]||"",hostname:c[3]||"",port:c[4]||"",pathname:c[5]||"",search:c[6]&&1!==c[6].length?c[6]:"",hash:c[7]&&1!==c[7].length?c[7]:""},c.path=c.pathname+c.search,c.isLocal=f(c),b&&(c.query=e(c.search))),c}function d(a){var b,c,d,e="";return a=a||{},e+=(a.protocol||location.protocol)+"//",a.host?e+=a.host:a.hostname?e+=a.hostname+(a.port?":"+a.port:""):e+=location.host,b=a.pathname,b&&"/"===b.charAt(0)&&(b=b.slice(1)),b&&(e+="/"+b),c=a.search,c&&("string"==typeof c?"?"===c.charAt(0)&&(c=c.slice(1)):c=z(c),c&&(e+="?"+c)),d=e.hash,d&&"#"===d.charAt(0)&&(d=d.slice(1)),d&&(e+="#"+d),e}function e(a){var b={};return a&&"?"===a.charAt(0)&&(a=a.slice(1)),a&&a.split("&").forEach(function(a){var c,d;a=a.split("="),(c=A(a[0]))&&(d=A(a.slice(1).join("=")),b[c]=d)}),b}function f(b){return"string"==typeof b&&(b=c(b)),b&&b.protocol===a.location.protocol&&b.host===a.location.host}function g(){return a.location.pathname+a.location.search}function h(){return i(a.location.href)}function i(a){return a.split("#").slice(1).join("#")}function j(a){return"//"===a.slice(0,2)?a.slice(1):a}function k(a){return"/"===a.charAt(0)?"/"+a:a}function l(b,c){c?a.location.replace("#"+b):a.location.hash=b}function m(a,b){return b?a+"#"+k(b):a}var n,o,p,q,r,s,t,u=/^\w+:\/\//i,v=/^(.+?:)\/\/(?:.+?(?::.+?)?@)?((.+?)(?::(\d+))?)(\/.*?)?(\?.*?)?(#.*)?$/,w=!(!a.history||!a.history.pushState),x=b.createElement("a"),y=g(),z=(j(h()),$.param.bind($)),A=function(a){return decodeURIComponent(a.replace(/\+/g,"%20"))};return x.href="a","a"===x.href?(p=b.createElement("div"),o=function(a){return p.innerHTML='<a href="'+a.replace(/"/g,"%22")+'"></a>',p.firstChild.href}):o=function(a){return x.href=a,x.href},n=function(a){return a=a||"",u.test(a)?a:o(a)},w?(q=function(a){return null==a?g():c(a).path},r=function(a){return j(null==a?h():i(a))},s=function(c){c?l(k(c),!0):a.history.replaceState({},b.title,g())}):(q=function(a){return null==a&&(a=h()),c(a).path},r=function(a){return null==a&&(a=h()),j(i(a))},s=function(a){l(m(q(),a),!0)}),{toAbsolute:n,parse:c,make:d,parseQuery:e,encodeQuery:z,isLocal:f,reload:function(){a.location.reload()},getPath:function(){return y},getQuery:function(){return c(y,!0).query},getHash:function(){return r()},getUrl:function(){return m(y,r())},getOrigin:function b(d){return d?(d=c(d),d.protocol+"//"+d.host):t=t||a.location.origin||b(a.location.href)},setHash:s}}(window,document)}(),function(){var a={};JihadCore.blockRegister($.extend(a,JihadBlock,{getSelector:function(){return".jh-animation"},getBindings:function(){return[]},initialize:function(b){switch(b.data("type")){case"rotating-plane":a.initializeRotatingPlane(b);break;case"double-bounce":a.initializeDoubleBounce(b);break;case"wave":a.initializeWave(b);break;case"pulse":a.initializePulse(b);break;case"three-bounce":a.initializeThreeWave(b);break;case"fading-circle":a.initializeFadingCircle(b)}},initializeDoubleBounce:function(a){a.addClass("sk-double-bounce"),a.html(['<div class="sk-child sk-double-bounce1"></div>','<div class="sk-child sk-double-bounce2"></div>'].join(""))},initializeWave:function(a){a.addClass("sk-wave"),a.html(['<div class="sk-rect sk-rect1"></div>','<div class="sk-rect sk-rect2"></div>','<div class="sk-rect sk-rect3"></div>','<div class="sk-rect sk-rect4"></div>','<div class="sk-rect sk-rect5"></div>'].join(""))},initializePulse:function(a){a.addClass("sk-spinner-pulse")},initializeThreeWave:function(a){a.addClass("sk-three-bounce"),a.html(['<div class="sk-child sk-bounce1"></div>','<div class="sk-child sk-bounce2"></div>','<div class="sk-child sk-bounce3"></div>'].join(""))},initializeFadingCircle:function(a){a.addClass("sk-fading-circle"),a.html(['<div class="sk-circle1 sk-circle"></div>','<div class="sk-circle2 sk-circle"></div>','<div class="sk-circle3 sk-circle"></div>','<div class="sk-circle4 sk-circle"></div>','<div class="sk-circle5 sk-circle"></div>','<div class="sk-circle6 sk-circle"></div>','<div class="sk-circle7 sk-circle"></div>','<div class="sk-circle8 sk-circle"></div>','<div class="sk-circle9 sk-circle"></div>','<div class="sk-circle10 sk-circle"></div>','<div class="sk-circle11 sk-circle"></div>','<div class="sk-circle12 sk-circle"></div>'].join(""))},initializeRotatingPlane:function(a){a.addClass("sk-rotating-plane")}}))}(),function(){var a={};JihadCore.blockRegister($.extend(a,JihadBlock,{getSelector:function(){return".jh-list"},initialize:function(a){this._checkDistance=JihadCore.throttle(this._checkDistance.bind(this,a),500),JihadCore.$win.on("load scroll resize",this._checkDistance),this._checkDistance()},getMoreUrl:function(a){var b,c;return this._noMore?null:(b=this.getMoreBtn(a),c=!!b.length,c||(JihadCore.$win.off("load scroll resize",this._checkDistance),this._noMore=!0),c?b.data("more-url"):null)},getMoreBtn:function(a){return a.find(".jh-list__more")},_checkDistance:function(a){var b=new JihadLock(a);if(b.isLocked(a))return!1;var c,d=this,e=JihadCore.$win,f=this.getMoreUrl(a);f&&(c=e.scrollTop()+e.height(),a.offset().top+a.height()-c<1e3&&(b.lock(a),a.addClass("jh-list__loading"),a.find(".jh-list__toggle").toggleClass("jh-list__hidden"),this.getMoreBtn(a).unbind(),$.ajax({url:f,dataType:"json",complete:function(){b.unlock(a)}}).done(function(c){var e,f=c&&c.result||{};d.getMoreBtn(a).remove(),b.unlock(a),a.removeClass("jh-list__loading"),a.find(".jh-list__toggle").toggleClass("jh-list__hidden"),f.html&&(e=$(f.html),a.append(e),JihadCore.blocksRun(e))})))}}))}(),function(){var a={};JihadCore.blockRegister($.extend(a,JihadBlock,{getSelector:function(){return".jh-select"},getBindings:function(){var a=this;return[["change",".jh-select__control",function(){var b=$(this),c=b.closest(".jh-select"),d=c.find(".jh-select__placeholder"),e=d.data("label-start"),f=d.data("label-end"),g=c.find("option:selected");""!==g.val()&&0!=g.val()?d.empty().append($("<span>",{class:"jh-select__label jh-select__label--start",html:e}),$("<span>",{class:"jh-select__label",html:g.html()}),$("<span>",{class:"jh-select__label jh-select__label--end",html:f})):c.find(".jh-select__placeholder").html(g.html()),a.setOptionAccess(b)}],["focus",".jh-select__control",function(){$(this).closest(".jh-select").toggleClass("focus",!0)}],["blur",".jh-select__control",function(){$(this).closest(".jh-select").toggleClass("focus",!1)}],["click, focus",".jh-select__input",function(){var a=$(this);a.closest(".jh-select").toggleClass("focus",!0),a.toggleClass("m-filled",!0),0==(parseInt(a.val().replace(/[^0-9]/g,""))||0)&&a.val("")}],["blur",".jh-select__input",function(){var a=$(this),b=a.closest(".jh-select"),c=b.find(".jh-select__placeholder");b.toggleClass("focus",!1),a.toggleClass("m-filled",!1);var d=parseInt(a.val().replace(/[^0-9]/g,""))||0;d==b.data("default-value")?b.toggleClass("m-default-value",!0):b.toggleClass("m-default-value",!1),b.data("default-label")?c.text(JihadTpl.text(b.data("default-label"),{value:d})):c.html("")}]]},setOptionAccess:function(a){var b,c,d,e=this.el().data("rel");if(e){if(c=a.find("option:selected").index(),e=e.split(":"),d="from"===e[0],this.el().data("equality")||(d?c--:c++),b=$("#"+e[1]+":visible option"),""===a.val()||0==a.val())return b.attr("disabled",!1);b.attr("disabled",!1).eq(c)[d?"nextAll":"prevAll"]().attr("disabled",!0)}}}))}(),function(){var a={};JihadCore.blockRegister($.extend(a,JihadBlock,{getSelector:function(){return".jh-stick"},getBindings:function(){return[]},initialize:function(a){a.stick_in_parent(a.data("stick"))}}))}(),function(){var a={};JihadCore.blockRegister($.extend(a,JihadBlock,{getSelector:function(){return".jh-textarea"},getBindings:function(){return[]},initialize:function(a){JihadBlock.initialize(a);var b=a.find("textarea");autosize(b),
-b.on("keydown",null,"ctrl+return",function(){b.parents("form").submit()})}}))}();
+/*!
+	Autosize 3.0.21
+	license: MIT
+	http://www.jacklmoore.com/autosize
+*/
+(function (global, factory) {
+	if (typeof define === 'function' && define.amd) {
+		define(['exports', 'module'], factory);
+	} else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
+		factory(exports, module);
+	} else {
+		var mod = {
+			exports: {}
+		};
+		factory(mod.exports, mod);
+		global.autosize = mod.exports;
+	}
+})(this, function (exports, module) {
+	'use strict';
+
+	var map = typeof Map === "function" ? new Map() : (function () {
+		var keys = [];
+		var values = [];
+
+		return {
+			has: function has(key) {
+				return keys.indexOf(key) > -1;
+			},
+			get: function get(key) {
+				return values[keys.indexOf(key)];
+			},
+			set: function set(key, value) {
+				if (keys.indexOf(key) === -1) {
+					keys.push(key);
+					values.push(value);
+				}
+			},
+			'delete': function _delete(key) {
+				var index = keys.indexOf(key);
+				if (index > -1) {
+					keys.splice(index, 1);
+					values.splice(index, 1);
+				}
+			}
+		};
+	})();
+
+	var createEvent = function createEvent(name) {
+		return new Event(name, { bubbles: true });
+	};
+	try {
+		new Event('test');
+	} catch (e) {
+		// IE does not support `new Event()`
+		createEvent = function (name) {
+			var evt = document.createEvent('Event');
+			evt.initEvent(name, true, false);
+			return evt;
+		};
+	}
+
+	function assign(ta) {
+		if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || map.has(ta)) return;
+
+		var heightOffset = null;
+		var clientWidth = ta.clientWidth;
+		var cachedHeight = null;
+
+		function init() {
+			var style = window.getComputedStyle(ta, null);
+
+			if (style.resize === 'vertical') {
+				ta.style.resize = 'none';
+			} else if (style.resize === 'both') {
+				ta.style.resize = 'horizontal';
+			}
+
+			if (style.boxSizing === 'content-box') {
+				heightOffset = -(parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+			} else {
+				heightOffset = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+			}
+			// Fix when a textarea is not on document body and heightOffset is Not a Number
+			if (isNaN(heightOffset)) {
+				heightOffset = 0;
+			}
+
+			update();
+		}
+
+		function changeOverflow(value) {
+			{
+				// Chrome/Safari-specific fix:
+				// When the textarea y-overflow is hidden, Chrome/Safari do not reflow the text to account for the space
+				// made available by removing the scrollbar. The following forces the necessary text reflow.
+				var width = ta.style.width;
+				ta.style.width = '0px';
+				// Force reflow:
+				/* jshint ignore:start */
+				ta.offsetWidth;
+				/* jshint ignore:end */
+				ta.style.width = width;
+			}
+
+			ta.style.overflowY = value;
+		}
+
+		function getParentOverflows(el) {
+			var arr = [];
+
+			while (el && el.parentNode && el.parentNode instanceof Element) {
+				if (el.parentNode.scrollTop) {
+					arr.push({
+						node: el.parentNode,
+						scrollTop: el.parentNode.scrollTop
+					});
+				}
+				el = el.parentNode;
+			}
+
+			return arr;
+		}
+
+		function resize() {
+			var originalHeight = ta.style.height;
+			var overflows = getParentOverflows(ta);
+			var docTop = document.documentElement && document.documentElement.scrollTop; // Needed for Mobile IE (ticket #240)
+
+			ta.style.height = 'auto';
+
+			var endHeight = ta.scrollHeight + heightOffset;
+
+			if (ta.scrollHeight === 0) {
+				// If the scrollHeight is 0, then the element probably has display:none or is detached from the DOM.
+				ta.style.height = originalHeight;
+				return;
+			}
+
+			ta.style.height = endHeight + 'px';
+
+			// used to check if an update is actually necessary on window.resize
+			clientWidth = ta.clientWidth;
+
+			// prevents scroll-position jumping
+			overflows.forEach(function (el) {
+				el.node.scrollTop = el.scrollTop;
+			});
+
+			if (docTop) {
+				document.documentElement.scrollTop = docTop;
+			}
+		}
+
+		function update() {
+			resize();
+
+			var styleHeight = Math.round(parseFloat(ta.style.height));
+			var computed = window.getComputedStyle(ta, null);
+
+			// Using offsetHeight as a replacement for computed.height in IE, because IE does not account use of border-box
+			var actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(computed.height)) : ta.offsetHeight;
+
+			// The actual height not matching the style height (set via the resize method) indicates that
+			// the max-height has been exceeded, in which case the overflow should be allowed.
+			if (actualHeight !== styleHeight) {
+				if (computed.overflowY === 'hidden') {
+					changeOverflow('scroll');
+					resize();
+					actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(window.getComputedStyle(ta, null).height)) : ta.offsetHeight;
+				}
+			} else {
+				// Normally keep overflow set to hidden, to avoid flash of scrollbar as the textarea expands.
+				if (computed.overflowY !== 'hidden') {
+					changeOverflow('hidden');
+					resize();
+					actualHeight = computed.boxSizing === 'content-box' ? Math.round(parseFloat(window.getComputedStyle(ta, null).height)) : ta.offsetHeight;
+				}
+			}
+
+			if (cachedHeight !== actualHeight) {
+				cachedHeight = actualHeight;
+				var evt = createEvent('autosize:resized');
+				try {
+					ta.dispatchEvent(evt);
+				} catch (err) {
+					// Firefox will throw an error on dispatchEvent for a detached element
+					// https://bugzilla.mozilla.org/show_bug.cgi?id=889376
+				}
+			}
+		}
+
+		var pageResize = function pageResize() {
+			if (ta.clientWidth !== clientWidth) {
+				update();
+			}
+		};
+
+		var destroy = (function (style) {
+			window.removeEventListener('resize', pageResize, false);
+			ta.removeEventListener('input', update, false);
+			ta.removeEventListener('keyup', update, false);
+			ta.removeEventListener('autosize:destroy', destroy, false);
+			ta.removeEventListener('autosize:update', update, false);
+
+			Object.keys(style).forEach(function (key) {
+				ta.style[key] = style[key];
+			});
+
+			map['delete'](ta);
+		}).bind(ta, {
+			height: ta.style.height,
+			resize: ta.style.resize,
+			overflowY: ta.style.overflowY,
+			overflowX: ta.style.overflowX,
+			wordWrap: ta.style.wordWrap
+		});
+
+		ta.addEventListener('autosize:destroy', destroy, false);
+
+		// IE9 does not fire onpropertychange or oninput for deletions,
+		// so binding to onkeyup to catch most of those events.
+		// There is no way that I know of to detect something like 'cut' in IE9.
+		if ('onpropertychange' in ta && 'oninput' in ta) {
+			ta.addEventListener('keyup', update, false);
+		}
+
+		window.addEventListener('resize', pageResize, false);
+		ta.addEventListener('input', update, false);
+		ta.addEventListener('autosize:update', update, false);
+		ta.style.overflowX = 'hidden';
+		ta.style.wordWrap = 'break-word';
+
+		map.set(ta, {
+			destroy: destroy,
+			update: update
+		});
+
+		init();
+	}
+
+	function destroy(ta) {
+		var methods = map.get(ta);
+		if (methods) {
+			methods.destroy();
+		}
+	}
+
+	function update(ta) {
+		var methods = map.get(ta);
+		if (methods) {
+			methods.update();
+		}
+	}
+
+	var autosize = null;
+
+	// Do nothing in Node.js environment and IE8 (or lower)
+	if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+		autosize = function (el) {
+			return el;
+		};
+		autosize.destroy = function (el) {
+			return el;
+		};
+		autosize.update = function (el) {
+			return el;
+		};
+	} else {
+		autosize = function (el, options) {
+			if (el) {
+				Array.prototype.forEach.call(el.length ? el : [el], function (x) {
+					return assign(x, options);
+				});
+			}
+			return el;
+		};
+		autosize.destroy = function (el) {
+			if (el) {
+				Array.prototype.forEach.call(el.length ? el : [el], destroy);
+			}
+			return el;
+		};
+		autosize.update = function (el) {
+			if (el) {
+				Array.prototype.forEach.call(el.length ? el : [el], update);
+			}
+			return el;
+		};
+	}
+
+	module.exports = autosize;
+});;// doT.js
+// 2011-2014, Laura Doktorova, https://github.com/olado/doT
+// Licensed under the MIT license.
+
+(function () {
+	"use strict";
+
+	var doT = {
+		name: "doT",
+		version: "1.1.1",
+		templateSettings: {
+			evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
+			interpolate: /\{\{=([\s\S]+?)\}\}/g,
+			encode:      /\{\{!([\s\S]+?)\}\}/g,
+			use:         /\{\{#([\s\S]+?)\}\}/g,
+			useParams:   /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
+			define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+			defineParams:/^\s*([\w$]+):([\s\S]+)/,
+			conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+			iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+			varname:	"it",
+			strip:		true,
+			append:		true,
+			selfcontained: false,
+			doNotSkipEncoded: false
+		},
+		template: undefined, //fn, compile template
+		compile:  undefined, //fn, for express
+		log: true
+	}, _globals;
+
+	doT.encodeHTMLSource = function(doNotSkipEncoded) {
+		var encodeHTMLRules = { "&": "&#38;", "<": "&#60;", ">": "&#62;", '"': "&#34;", "'": "&#39;", "/": "&#47;" },
+			matchHTML = doNotSkipEncoded ? /[&<>"'\/]/g : /&(?!#?\w+;)|<|>|"|'|\//g;
+		return function(code) {
+			return code ? code.toString().replace(matchHTML, function(m) {return encodeHTMLRules[m] || m;}) : "";
+		};
+	};
+
+	_globals = (function(){ return this || (0,eval)("this"); }());
+
+	/* istanbul ignore else */
+	if (typeof module !== "undefined" && module.exports) {
+		module.exports = doT;
+	} else if (typeof define === "function" && define.amd) {
+		define(function(){return doT;});
+	} else {
+		_globals.doT = doT;
+	}
+
+	var startend = {
+		append: { start: "'+(",      end: ")+'",      startencode: "'+encodeHTML(" },
+		split:  { start: "';out+=(", end: ");out+='", startencode: "';out+=encodeHTML(" }
+	}, skip = /$^/;
+
+	function resolveDefs(c, block, def) {
+		return ((typeof block === "string") ? block : block.toString())
+		.replace(c.define || skip, function(m, code, assign, value) {
+			if (code.indexOf("def.") === 0) {
+				code = code.substring(4);
+			}
+			if (!(code in def)) {
+				if (assign === ":") {
+					if (c.defineParams) value.replace(c.defineParams, function(m, param, v) {
+						def[code] = {arg: param, text: v};
+					});
+					if (!(code in def)) def[code]= value;
+				} else {
+					new Function("def", "def['"+code+"']=" + value)(def);
+				}
+			}
+			return "";
+		})
+		.replace(c.use || skip, function(m, code) {
+			if (c.useParams) code = code.replace(c.useParams, function(m, s, d, param) {
+				if (def[d] && def[d].arg && param) {
+					var rw = (d+":"+param).replace(/'|\\/g, "_");
+					def.__exp = def.__exp || {};
+					def.__exp[rw] = def[d].text.replace(new RegExp("(^|[^\\w$])" + def[d].arg + "([^\\w$])", "g"), "$1" + param + "$2");
+					return s + "def.__exp['"+rw+"']";
+				}
+			});
+			var v = new Function("def", "return " + code)(def);
+			return v ? resolveDefs(c, v, def) : v;
+		});
+	}
+
+	function unescape(code) {
+		return code.replace(/\\('|\\)/g, "$1").replace(/[\r\t\n]/g, " ");
+	}
+
+	doT.template = function(tmpl, c, def) {
+		c = c || doT.templateSettings;
+		var cse = c.append ? startend.append : startend.split, needhtmlencode, sid = 0, indv,
+			str  = (c.use || c.define) ? resolveDefs(c, tmpl, def || {}) : tmpl;
+
+		str = ("var out='" + (c.strip ? str.replace(/(^|\r|\n)\t* +| +\t*(\r|\n|$)/g," ")
+					.replace(/\r|\n|\t|\/\*[\s\S]*?\*\//g,""): str)
+			.replace(/'|\\/g, "\\$&")
+			.replace(c.interpolate || skip, function(m, code) {
+				return cse.start + unescape(code) + cse.end;
+			})
+			.replace(c.encode || skip, function(m, code) {
+				needhtmlencode = true;
+				return cse.startencode + unescape(code) + cse.end;
+			})
+			.replace(c.conditional || skip, function(m, elsecase, code) {
+				return elsecase ?
+					(code ? "';}else if(" + unescape(code) + "){out+='" : "';}else{out+='") :
+					(code ? "';if(" + unescape(code) + "){out+='" : "';}out+='");
+			})
+			.replace(c.iterate || skip, function(m, iterate, vname, iname) {
+				if (!iterate) return "';} } out+='";
+				sid+=1; indv=iname || "i"+sid; iterate=unescape(iterate);
+				return "';var arr"+sid+"="+iterate+";if(arr"+sid+"){var "+vname+","+indv+"=-1,l"+sid+"=arr"+sid+".length-1;while("+indv+"<l"+sid+"){"
+					+vname+"=arr"+sid+"["+indv+"+=1];out+='";
+			})
+			.replace(c.evaluate || skip, function(m, code) {
+				return "';" + unescape(code) + "out+='";
+			})
+			+ "';return out;")
+			.replace(/\n/g, "\\n").replace(/\t/g, '\\t').replace(/\r/g, "\\r")
+			.replace(/(\s|;|\}|^|\{)out\+='';/g, '$1').replace(/\+''/g, "");
+			//.replace(/(\s|;|\}|^|\{)out\+=''\+/g,'$1out+=');
+
+		if (needhtmlencode) {
+			if (!c.selfcontained && _globals && !_globals._encodeHTML) _globals._encodeHTML = doT.encodeHTMLSource(c.doNotSkipEncoded);
+			str = "var encodeHTML = typeof _encodeHTML !== 'undefined' ? _encodeHTML : ("
+				+ doT.encodeHTMLSource.toString() + "(" + (c.doNotSkipEncoded || '') + "));"
+				+ str;
+		}
+		try {
+			return new Function(c.varname, str);
+		} catch (e) {
+			/* istanbul ignore else */
+			if (typeof console !== "undefined") console.log("Could not create a template function: " + str);
+			throw e;
+		}
+	};
+
+	doT.compile = function(tmpl, def) {
+		return doT.template(tmpl, null, def);
+	};
+}());
+;/*!
+ * JavaScript Cookie v2.1.4
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+;(function (factory) {
+	var registeredInModuleLoader = false;
+	if (typeof define === 'function' && define.amd) {
+		define(factory);
+		registeredInModuleLoader = true;
+	}
+	if (typeof exports === 'object') {
+		module.exports = factory();
+		registeredInModuleLoader = true;
+	}
+	if (!registeredInModuleLoader) {
+		var OldCookies = window.Cookies;
+		var api = window.Cookies = factory();
+		api.noConflict = function () {
+			window.Cookies = OldCookies;
+			return api;
+		};
+	}
+}(function () {
+	function extend () {
+		var i = 0;
+		var result = {};
+		for (; i < arguments.length; i++) {
+			var attributes = arguments[ i ];
+			for (var key in attributes) {
+				result[key] = attributes[key];
+			}
+		}
+		return result;
+	}
+
+	function init (converter) {
+		function api (key, value, attributes) {
+			var result;
+			if (typeof document === 'undefined') {
+				return;
+			}
+
+			// Write
+
+			if (arguments.length > 1) {
+				attributes = extend({
+					path: '/'
+				}, api.defaults, attributes);
+
+				if (typeof attributes.expires === 'number') {
+					var expires = new Date();
+					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
+					attributes.expires = expires;
+				}
+
+				// We're using "expires" because "max-age" is not supported by IE
+				attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+				try {
+					result = JSON.stringify(value);
+					if (/^[\{\[]/.test(result)) {
+						value = result;
+					}
+				} catch (e) {}
+
+				if (!converter.write) {
+					value = encodeURIComponent(String(value))
+						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+				} else {
+					value = converter.write(value, key);
+				}
+
+				key = encodeURIComponent(String(key));
+				key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
+				key = key.replace(/[\(\)]/g, escape);
+
+				var stringifiedAttributes = '';
+
+				for (var attributeName in attributes) {
+					if (!attributes[attributeName]) {
+						continue;
+					}
+					stringifiedAttributes += '; ' + attributeName;
+					if (attributes[attributeName] === true) {
+						continue;
+					}
+					stringifiedAttributes += '=' + attributes[attributeName];
+				}
+				return (document.cookie = key + '=' + value + stringifiedAttributes);
+			}
+
+			// Read
+
+			if (!key) {
+				result = {};
+			}
+
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all. Also prevents odd result when
+			// calling "get()"
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var rdecode = /(%[0-9A-Z]{2})+/g;
+			var i = 0;
+
+			for (; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var cookie = parts.slice(1).join('=');
+
+				if (cookie.charAt(0) === '"') {
+					cookie = cookie.slice(1, -1);
+				}
+
+				try {
+					var name = parts[0].replace(rdecode, decodeURIComponent);
+					cookie = converter.read ?
+						converter.read(cookie, name) : converter(cookie, name) ||
+						cookie.replace(rdecode, decodeURIComponent);
+
+					if (this.json) {
+						try {
+							cookie = JSON.parse(cookie);
+						} catch (e) {}
+					}
+
+					if (key === name) {
+						result = cookie;
+						break;
+					}
+
+					if (!key) {
+						result[name] = cookie;
+					}
+				} catch (e) {}
+			}
+
+			return result;
+		}
+
+		api.set = api;
+		api.get = function (key) {
+			return api.call(api, key);
+		};
+		api.getJSON = function () {
+			return api.apply({
+				json: true
+			}, [].slice.call(arguments));
+		};
+		api.defaults = {};
+
+		api.remove = function (key, attributes) {
+			api(key, '', extend(attributes, {
+				expires: -1
+			}));
+		};
+
+		api.withConverter = init;
+
+		return api;
+	}
+
+	return init(function () {});
+}));
+;/**
+ * jQuery serializeObject
+ * @copyright 2014, macek <paulmacek@gmail.com>
+ * @link https://github.com/macek/jquery-serialize-object
+ * @license BSD
+ * @version 2.5.0
+ */
+(function(root, factory) {
+
+  // AMD
+  if (typeof define === "function" && define.amd) {
+    define(["exports", "jquery"], function(exports, $) {
+      return factory(exports, $);
+    });
+  }
+
+  // CommonJS
+  else if (typeof exports !== "undefined") {
+    var $ = require("jquery");
+    factory(exports, $);
+  }
+
+  // Browser
+  else {
+    factory(root, (root.jQuery || root.Zepto || root.ender || root.$));
+  }
+
+}(this, function(exports, $) {
+
+  var patterns = {
+    validate: /^[a-z_][a-z0-9_]*(?:\[(?:\d*|[a-z0-9_]+)\])*$/i,
+    key:      /[a-z0-9_]+|(?=\[\])/gi,
+    push:     /^$/,
+    fixed:    /^\d+$/,
+    named:    /^[a-z0-9_]+$/i
+  };
+
+  function FormSerializer(helper, $form) {
+
+    // private variables
+    var data     = {},
+        pushes   = {};
+
+    // private API
+    function build(base, key, value) {
+      base[key] = value;
+      return base;
+    }
+
+    function makeObject(root, value) {
+
+      var keys = root.match(patterns.key), k;
+
+      // nest, nest, ..., nest
+      while ((k = keys.pop()) !== undefined) {
+        // foo[]
+        if (patterns.push.test(k)) {
+          var idx = incrementPush(root.replace(/\[\]$/, ''));
+          value = build([], idx, value);
+        }
+
+        // foo[n]
+        else if (patterns.fixed.test(k)) {
+          value = build([], k, value);
+        }
+
+        // foo; foo[bar]
+        else if (patterns.named.test(k)) {
+          value = build({}, k, value);
+        }
+      }
+
+      return value;
+    }
+
+    function incrementPush(key) {
+      if (pushes[key] === undefined) {
+        pushes[key] = 0;
+      }
+      return pushes[key]++;
+    }
+
+    function encode(pair) {
+      switch ($('[name="' + pair.name + '"]', $form).attr("type")) {
+        case "checkbox":
+          return pair.value === "on" ? true : pair.value;
+        default:
+          return pair.value;
+      }
+    }
+
+    function addPair(pair) {
+      if (!patterns.validate.test(pair.name)) return this;
+      var obj = makeObject(pair.name, encode(pair));
+      data = helper.extend(true, data, obj);
+      return this;
+    }
+
+    function addPairs(pairs) {
+      if (!helper.isArray(pairs)) {
+        throw new Error("formSerializer.addPairs expects an Array");
+      }
+      for (var i=0, len=pairs.length; i<len; i++) {
+        this.addPair(pairs[i]);
+      }
+      return this;
+    }
+
+    function serialize() {
+      return data;
+    }
+
+    function serializeJSON() {
+      return JSON.stringify(serialize());
+    }
+
+    // public API
+    this.addPair = addPair;
+    this.addPairs = addPairs;
+    this.serialize = serialize;
+    this.serializeJSON = serializeJSON;
+  }
+
+  FormSerializer.patterns = patterns;
+
+  FormSerializer.serializeObject = function serializeObject() {
+    return new FormSerializer($, this).
+      addPairs(this.serializeArray()).
+      serialize();
+  };
+
+  FormSerializer.serializeJSON = function serializeJSON() {
+    return new FormSerializer($, this).
+      addPairs(this.serializeArray()).
+      serializeJSON();
+  };
+
+  if (typeof $.fn !== "undefined") {
+    $.fn.serializeObject = FormSerializer.serializeObject;
+    $.fn.serializeJSON   = FormSerializer.serializeJSON;
+  }
+
+  exports.FormSerializer = FormSerializer;
+
+  return FormSerializer;
+}));
+;// Generated by CoffeeScript 1.6.2
+/**
+@license Sticky-kit v1.1.3 | WTFPL | Leaf Corcoran 2015 | http://leafo.net
+*/
+
+
+(function() {
+  var $, win;
+
+  $ = this.jQuery || window.jQuery;
+
+  win = $(window);
+
+  $.fn.stick_in_parent = function(opts) {
+    var doc, elm, enable_bottoming, inner_scrolling, manual_spacer, offset_top, outer_width, parent_selector, recalc_every, sticky_class, _fn, _i, _len;
+
+    if (opts == null) {
+      opts = {};
+    }
+    sticky_class = opts.sticky_class, inner_scrolling = opts.inner_scrolling, recalc_every = opts.recalc_every, parent_selector = opts.parent, offset_top = opts.offset_top, manual_spacer = opts.spacer, enable_bottoming = opts.bottoming;
+    if (offset_top == null) {
+      offset_top = 0;
+    }
+    if (parent_selector == null) {
+      parent_selector = void 0;
+    }
+    if (inner_scrolling == null) {
+      inner_scrolling = true;
+    }
+    if (sticky_class == null) {
+      sticky_class = "is_stuck";
+    }
+    doc = $(document);
+    if (enable_bottoming == null) {
+      enable_bottoming = true;
+    }
+    outer_width = function(el) {
+      var computed, w, _el;
+
+      if (window.getComputedStyle) {
+        _el = el[0];
+        computed = window.getComputedStyle(el[0]);
+        w = parseFloat(computed.getPropertyValue("width")) + parseFloat(computed.getPropertyValue("margin-left")) + parseFloat(computed.getPropertyValue("margin-right"));
+        if (computed.getPropertyValue("box-sizing") !== "border-box") {
+          w += parseFloat(computed.getPropertyValue("border-left-width")) + parseFloat(computed.getPropertyValue("border-right-width")) + parseFloat(computed.getPropertyValue("padding-left")) + parseFloat(computed.getPropertyValue("padding-right"));
+        }
+        return w;
+      } else {
+        return el.outerWidth(true);
+      }
+    };
+    _fn = function(elm, padding_bottom, parent_top, parent_height, top, height, el_float, detached) {
+      var bottomed, detach, fixed, last_pos, last_scroll_height, offset, parent, recalc, recalc_and_tick, recalc_counter, spacer, tick;
+
+      if (elm.data("sticky_kit")) {
+        return;
+      }
+      elm.data("sticky_kit", true);
+      last_scroll_height = doc.height();
+      parent = elm.parent();
+      if (parent_selector != null) {
+        parent = parent.closest(parent_selector);
+      }
+      if (!parent.length) {
+        throw "failed to find stick parent";
+      }
+      fixed = false;
+      bottomed = false;
+      spacer = manual_spacer != null ? manual_spacer && elm.closest(manual_spacer) : $("<div />");
+      if (spacer) {
+        spacer.css('position', elm.css('position'));
+      }
+      recalc = function() {
+        var border_top, padding_top, restore;
+
+        if (detached) {
+          return;
+        }
+        last_scroll_height = doc.height();
+        border_top = parseInt(parent.css("border-top-width"), 10);
+        padding_top = parseInt(parent.css("padding-top"), 10);
+        padding_bottom = parseInt(parent.css("padding-bottom"), 10);
+        parent_top = parent.offset().top + border_top + padding_top;
+        parent_height = parent.height();
+        if (fixed) {
+          fixed = false;
+          bottomed = false;
+          if (manual_spacer == null) {
+            elm.insertAfter(spacer);
+            spacer.detach();
+          }
+          elm.css({
+            position: "",
+            top: "",
+            width: "",
+            bottom: ""
+          }).removeClass(sticky_class);
+          restore = true;
+        }
+        top = elm.offset().top - (parseInt(elm.css("margin-top"), 10) || 0) - offset_top;
+        height = elm.outerHeight(true);
+        el_float = elm.css("float");
+        if (spacer) {
+          spacer.css({
+            width: outer_width(elm),
+            height: height,
+            display: elm.css("display"),
+            "vertical-align": elm.css("vertical-align"),
+            "float": el_float
+          });
+        }
+        if (restore) {
+          return tick();
+        }
+      };
+      recalc();
+      if (height === parent_height) {
+        return;
+      }
+      last_pos = void 0;
+      offset = offset_top;
+      recalc_counter = recalc_every;
+      tick = function() {
+        var css, delta, recalced, scroll, will_bottom, win_height;
+
+        if (detached) {
+          return;
+        }
+        recalced = false;
+        if (recalc_counter != null) {
+          recalc_counter -= 1;
+          if (recalc_counter <= 0) {
+            recalc_counter = recalc_every;
+            recalc();
+            recalced = true;
+          }
+        }
+        if (!recalced && doc.height() !== last_scroll_height) {
+          recalc();
+          recalced = true;
+        }
+        scroll = win.scrollTop();
+        if (last_pos != null) {
+          delta = scroll - last_pos;
+        }
+        last_pos = scroll;
+        if (fixed) {
+          if (enable_bottoming) {
+            will_bottom = scroll + height + offset > parent_height + parent_top;
+            if (bottomed && !will_bottom) {
+              bottomed = false;
+              elm.css({
+                position: "fixed",
+                bottom: "",
+                top: offset
+              }).trigger("sticky_kit:unbottom");
+            }
+          }
+          if (scroll < top) {
+            fixed = false;
+            offset = offset_top;
+            if (manual_spacer == null) {
+              if (el_float === "left" || el_float === "right") {
+                elm.insertAfter(spacer);
+              }
+              spacer.detach();
+            }
+            css = {
+              position: "",
+              width: "",
+              top: ""
+            };
+            elm.css(css).removeClass(sticky_class).trigger("sticky_kit:unstick");
+          }
+          if (inner_scrolling) {
+            win_height = win.height();
+            if (height + offset_top > win_height) {
+              if (!bottomed) {
+                offset -= delta;
+                offset = Math.max(win_height - height, offset);
+                offset = Math.min(offset_top, offset);
+                if (fixed) {
+                  elm.css({
+                    top: offset + "px"
+                  });
+                }
+              }
+            }
+          }
+        } else {
+          if (scroll > top) {
+            fixed = true;
+            css = {
+              position: "fixed",
+              top: offset
+            };
+            css.width = elm.css("box-sizing") === "border-box" ? elm.outerWidth() + "px" : elm.width() + "px";
+            elm.css(css).addClass(sticky_class);
+            if (manual_spacer == null) {
+              elm.after(spacer);
+              if (el_float === "left" || el_float === "right") {
+                spacer.append(elm);
+              }
+            }
+            elm.trigger("sticky_kit:stick");
+          }
+        }
+        if (fixed && enable_bottoming) {
+          if (will_bottom == null) {
+            will_bottom = scroll + height + offset > parent_height + parent_top;
+          }
+          if (!bottomed && will_bottom) {
+            bottomed = true;
+            if (parent.css("position") === "static") {
+              parent.css({
+                position: "relative"
+              });
+            }
+            return elm.css({
+              position: "absolute",
+              bottom: padding_bottom,
+              top: "auto"
+            }).trigger("sticky_kit:bottom");
+          }
+        }
+      };
+      recalc_and_tick = function() {
+        recalc();
+        return tick();
+      };
+      detach = function() {
+        detached = true;
+        win.off("touchmove", tick);
+        win.off("scroll", tick);
+        win.off("resize", recalc_and_tick);
+        $(document.body).off("sticky_kit:recalc", recalc_and_tick);
+        elm.off("sticky_kit:detach", detach);
+        elm.removeData("sticky_kit");
+        elm.css({
+          position: "",
+          bottom: "",
+          top: "",
+          width: ""
+        });
+        parent.position("position", "");
+        if (fixed) {
+          if (manual_spacer == null) {
+            if (el_float === "left" || el_float === "right") {
+              elm.insertAfter(spacer);
+            }
+            spacer.remove();
+          }
+          return elm.removeClass(sticky_class);
+        }
+      };
+      win.on("touchmove", tick);
+      win.on("scroll", tick);
+      win.on("resize", recalc_and_tick);
+      $(document.body).on("sticky_kit:recalc", recalc_and_tick);
+      elm.on("sticky_kit:detach", detach);
+      return setTimeout(tick, 0);
+    };
+    for (_i = 0, _len = this.length; _i < _len; _i++) {
+      elm = this[_i];
+      _fn($(elm));
+    }
+    return this;
+  };
+
+}).call(this);
+;/*jslint browser: true*/
+/*jslint jquery: true*/
+
+/*
+ * jQuery Hotkeys Plugin
+ * Copyright 2010, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ *
+ * Based upon the plugin by Tzury Bar Yochay:
+ * https://github.com/tzuryby/jquery.hotkeys
+ *
+ * Original idea by:
+ * Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
+ */
+
+/*
+ * One small change is: now keys are passed by object { keys: '...' }
+ * Might be useful, when you want to pass some other data to your handler
+ */
+
+(function(jQuery) {
+
+  jQuery.hotkeys = {
+    version: "0.8",
+
+    specialKeys: {
+      8: "backspace",
+      9: "tab",
+      10: "return",
+      13: "return",
+      16: "shift",
+      17: "ctrl",
+      18: "alt",
+      19: "pause",
+      20: "capslock",
+      27: "esc",
+      32: "space",
+      33: "pageup",
+      34: "pagedown",
+      35: "end",
+      36: "home",
+      37: "left",
+      38: "up",
+      39: "right",
+      40: "down",
+      45: "insert",
+      46: "del",
+      59: ";",
+      61: "=",
+      96: "0",
+      97: "1",
+      98: "2",
+      99: "3",
+      100: "4",
+      101: "5",
+      102: "6",
+      103: "7",
+      104: "8",
+      105: "9",
+      106: "*",
+      107: "+",
+      109: "-",
+      110: ".",
+      111: "/",
+      112: "f1",
+      113: "f2",
+      114: "f3",
+      115: "f4",
+      116: "f5",
+      117: "f6",
+      118: "f7",
+      119: "f8",
+      120: "f9",
+      121: "f10",
+      122: "f11",
+      123: "f12",
+      144: "numlock",
+      145: "scroll",
+      173: "-",
+      186: ";",
+      187: "=",
+      188: ",",
+      189: "-",
+      190: ".",
+      191: "/",
+      192: "`",
+      219: "[",
+      220: "\\",
+      221: "]",
+      222: "'"
+    },
+
+    shiftNums: {
+      "`": "~",
+      "1": "!",
+      "2": "@",
+      "3": "#",
+      "4": "$",
+      "5": "%",
+      "6": "^",
+      "7": "&",
+      "8": "*",
+      "9": "(",
+      "0": ")",
+      "-": "_",
+      "=": "+",
+      ";": ": ",
+      "'": "\"",
+      ",": "<",
+      ".": ">",
+      "/": "?",
+      "\\": "|"
+    },
+
+    // excludes: button, checkbox, file, hidden, image, password, radio, reset, search, submit, url
+    textAcceptingInputTypes: [
+      "text", "password", "number", "email", "url", "range", "date", "month", "week", "time", "datetime",
+      "datetime-local", "search", "color", "tel"],
+
+    // default input types not to bind to unless bound directly
+    textInputTypes: /textarea|input|select/i,
+
+    options: {
+      filterInputAcceptingElements: true,
+      filterTextInputs: true,
+      filterContentEditable: true
+    }
+  };
+
+  function keyHandler(handleObj) {
+    if (typeof handleObj.data === "string") {
+      handleObj.data = {
+        keys: handleObj.data
+      };
+    }
+
+    // Only care when a possible input has been specified
+    if (!handleObj.data || !handleObj.data.keys || typeof handleObj.data.keys !== "string") {
+      return;
+    }
+
+    var origHandler = handleObj.handler,
+      keys = handleObj.data.keys.toLowerCase().split(" ");
+
+    handleObj.handler = function(event) {
+      //      Don't fire in text-accepting inputs that we didn't directly bind to
+      if (this !== event.target &&
+        (jQuery.hotkeys.options.filterInputAcceptingElements &&
+          jQuery.hotkeys.textInputTypes.test(event.target.nodeName) ||
+          (jQuery.hotkeys.options.filterContentEditable && jQuery(event.target).attr('contenteditable')) ||
+          (jQuery.hotkeys.options.filterTextInputs &&
+            jQuery.inArray(event.target.type, jQuery.hotkeys.textAcceptingInputTypes) > -1))) {
+        return;
+      }
+
+      var special = event.type !== "keypress" && jQuery.hotkeys.specialKeys[event.which],
+        character = String.fromCharCode(event.which).toLowerCase(),
+        modif = "",
+        possible = {};
+
+      jQuery.each(["alt", "ctrl", "shift"], function(index, specialKey) {
+
+        if (event[specialKey + 'Key'] && special !== specialKey) {
+          modif += specialKey + '+';
+        }
+      });
+
+      // metaKey is triggered off ctrlKey erronously
+      if (event.metaKey && !event.ctrlKey && special !== "meta") {
+        modif += "meta+";
+      }
+
+      if (event.metaKey && special !== "meta" && modif.indexOf("alt+ctrl+shift+") > -1) {
+        modif = modif.replace("alt+ctrl+shift+", "hyper+");
+      }
+
+      if (special) {
+        possible[modif + special] = true;
+      }
+      else {
+        possible[modif + character] = true;
+        possible[modif + jQuery.hotkeys.shiftNums[character]] = true;
+
+        // "$" can be triggered as "Shift+4" or "Shift+$" or just "$"
+        if (modif === "shift+") {
+          possible[jQuery.hotkeys.shiftNums[character]] = true;
+        }
+      }
+
+      for (var i = 0, l = keys.length; i < l; i++) {
+        if (possible[keys[i]]) {
+          return origHandler.apply(this, arguments);
+        }
+      }
+    };
+  }
+
+  jQuery.each(["keydown", "keyup", "keypress"], function() {
+    jQuery.event.special[this] = {
+      add: keyHandler
+    };
+  });
+
+})(jQuery || this.jQuery || window.jQuery);
+;(function($) {
+
+// jQuery on an empty object, we are going to use this as our Queue
+var ajaxQueue = $({});
+
+$.ajaxQueue = function( ajaxOpts ) {
+    var jqXHR,
+        dfd = $.Deferred(),
+        promise = dfd.promise();
+
+    // run the actual query
+    function doRequest( next ) {
+        jqXHR = $.ajax( ajaxOpts );
+        jqXHR.done( dfd.resolve )
+            .fail( dfd.reject )
+            .then( next, next );
+    }
+
+    // queue our ajax request
+    ajaxQueue.queue( doRequest );
+
+    // add the abort method
+    promise.abort = function( statusText ) {
+
+        // proxy abort to the jqXHR if it is active
+        if ( jqXHR ) {
+            return jqXHR.abort( statusText );
+        }
+
+        // if there wasn't already a jqXHR we need to remove from queue
+        var queue = ajaxQueue.queue(),
+            index = $.inArray( doRequest, queue );
+
+        if ( index > -1 ) {
+            queue.splice( index, 1 );
+        }
+
+        // and then reject the deferred
+        dfd.rejectWith( ajaxOpts.context || ajaxOpts, [ promise, statusText, "" ] );
+        return promise;
+    };
+
+    return promise;
+};
+
+})(jQuery);
+;(
+    function()
+    {
+        var JihadCore = window.JihadCore = {
+            $win: $(window),
+            $doc: $(document),
+            $html: $('html'),
+            $body: $('body')
+        };
+
+        /**
+         * List of registered blocks
+         */
+
+        JihadCore.blocks = {};
+
+        /**
+         * Main function to register
+         */
+
+        JihadCore.blockRegister = function(block)
+        {
+            var selector = block.getSelector();
+
+            if (selector)
+            {
+                if (selector in JihadCore.blocks)
+                {
+                    console.log('Selector ' + selector + ' is already registered in other block');
+                }
+                else
+                {
+                    JihadCore.blocks[selector] = block;
+                }
+            }
+
+            return this;
+        };
+
+        /**
+         * Apply blocks
+         */
+
+        JihadCore.blocksRun = function(dom)
+        {
+            var parent = dom || document;
+
+            $.each(
+                JihadCore.blocks,
+                function(selector, block)
+                {
+                    var $target = $(parent).filter(selector).add($(selector, parent));
+
+                    if ($target.length)
+                    {
+                        $target.each(
+                            function ()
+                            {
+                                if (block.inherit)
+                                {
+                                    $.each(
+                                        block.inherit, function (i, name)
+                                        {
+                                            block = $.extend(
+                                                {
+                                                    super: function (selector)
+                                                    {
+                                                        return JihadCore.blocks[selector || name];
+                                                    }
+                                                },
+                                                JihadCore.blocks[name] || {},
+                                                block
+                                            )
+                                        }
+                                    );
+                                    JihadCore.blocks[selector] = block;
+                                }
+                                
+                                block.run($(this));
+                            }
+                        );
+                    }
+                }
+            );
+
+            return this;
+        };
+
+        /**
+         * Checks whether variable is defined or not.
+         */
+
+        JihadCore.isDefined = function (variable)
+        {
+            return variable != null;
+        };
+
+
+        var jihadDataCache = {};
+        JihadCore.data = function (key, value) {
+            if (arguments.length < 2) {
+                return jihadDataCache[key];
+            }
+            jihadDataCache[key] = value;
+        };
+
+
+        /**
+         * Make function throttled
+         */
+        JihadCore.throttle = function (fn, delay) {
+            var timeoutId = null,
+                queued = false,
+                fnThis,
+                fnArgs;
+
+            function throttled() {
+                fnThis = this;
+                fnArgs = arguments;
+
+                if (timeoutId) {
+                    queued = true;
+                } else {
+                    fn.apply(fnThis, fnArgs);
+                    timeoutId = setTimeout(function () {
+                        timeoutId = null;
+                        if (queued) {
+                            queued = false;
+                            throttled.apply(fnThis, fnArgs);
+                        }
+                    }, delay);
+                }
+            }
+
+            function reset() {
+                queued = false;
+            }
+
+            throttled.reset = reset;
+
+            return throttled;
+        };
+    }()
+);
+;(
+    function ()
+    {
+        var JihadBlock = window.JihadBlock = {};
+        
+        /**
+         * Returns main block selector and children elements
+         */
+        
+        JihadBlock.getSelector = function ()
+        {
+            return null;
+        };
+        
+        JihadBlock.sel = function (q, n)
+        {
+            if (typeof q === 'number') return this.getSelector().slice(q);
+            
+            return q ? (this.getSelector() + '-' + q).slice(n) : this.getSelector();
+        };
+        
+        /**
+         * Communication between blocks
+         */
+        
+        JihadBlock.emit = function (event)
+        {
+            if (!event) throw new Error('Event name is not set.');
+            
+            var props = $.makeArray(arguments).slice(1);
+            
+            $.each(
+                JihadCore.blocks,
+                function (selector)
+                {
+                    $(selector).each(
+                        function ()
+                        {
+                            $(this).triggerHandler(
+                                $.Event(
+                                    event, {
+                                        __jihadSelector: selector
+                                    }
+                                ),
+                                props
+                            );
+                        }
+                    )
+                }
+            );
+        };
+        
+        /**
+         * Returns bindings
+         */
+        
+        JihadBlock.getBindings = function ()
+        {
+            return [];
+        };
+        
+        /**
+         * Returns initialized flag for block
+         */
+        
+        JihadBlock.isInitialized = function ($target)
+        {
+            var initialized = $target.data('jihad-initialized');
+            if (initialized)
+            {
+                var selector = this.getSelector();
+                if (selector in initialized)
+                    return true;
+            }
+            
+            return false;
+        };
+        
+        /**
+         * Function to apply all bindings
+         */
+        
+        JihadBlock.applyBindings = function ($target)
+        {
+            var block = this;
+            
+            $.each(
+                this.getBindings($target),
+                function (index, binding)
+                {
+                    $target.on.apply(
+                        $target,
+                        [
+                            binding[0],
+                            typeof binding[1] === 'string' ? binding[1] : handler(binding[1]),
+                            binding[2] ? handler(binding[2]) : undefined
+                        ]
+                    );
+                    
+                    function handler(prime)
+                    {
+                        return function (e)
+                        {
+                            if (e.__jihadSelector)
+                            {
+                                if (block.getSelector() === e.__jihadSelector)
+                                    return prime.apply(this, arguments);
+                            }
+                            else
+                                return prime.apply(this, arguments);
+                        }
+                    }
+                }
+            );
+        };
+        
+        /**
+         * Returns initialize function
+         */
+        
+        JihadBlock.initialize = function ($target)
+        {
+        };
+        
+        /**
+         * Returns finalize function
+         */
+        
+        JihadBlock.finalize = function ($target)
+        {
+        };
+        
+        /**
+         * Run block
+         */
+        
+        JihadBlock.run = function ($target)
+        {
+            var self = this;
+            
+            function _tmp() {}
+            
+            $.each(
+                $target,
+                function ()
+                {
+                    var $elem = $(this);
+                    
+                    _tmp.prototype = self;
+                    self           = new _tmp();
+                    _tmp.prototype = null;
+                    
+                    if (!self.isInitialized($elem))
+                    {
+                        var initialized                 = $elem.data('jihad-initialized') || {};
+                        initialized[self.getSelector()] = 1;
+                        $elem.data('jihad-initialized', initialized);
+                        
+                        self.el = function (q)
+                        {
+                            return q ? $(self.getSelector() + '-' + q, $elem) : $elem;
+                        };
+                        self.initialize($elem);
+                        self.applyBindings($elem);
+                        self.finalize($elem);
+                    }
+                }
+            );
+        };
+    }()
+);
+;(
+    function()
+    {
+        var JihadForm = window.JihadForm = {
+            lock: null,
+            lockSelector: null
+        };
+    
+        $(window).on(
+            'beforeunload', function ()
+            {
+                JihadForm.__unloaded = true;
+            }
+        );
+
+        /**
+         * Returns form action
+         */
+
+        JihadForm.getAction = function($form)
+        {
+            return $form.attr('action');
+        };
+
+        /**
+         * Returns post method
+         */
+
+        JihadForm.getMethod = function($form)
+        {
+            return $form.attr('method') || 'POST';
+        };
+
+        /**
+         * Returns post data
+         */
+
+        JihadForm.getData = function($form)
+        {
+            return $form.serialize();
+        };
+
+        /**
+         * Returns lock
+         */
+
+        JihadForm.getLock = function()
+        {
+            if (this.lock === null)
+                this.lock = this.createLock();
+
+            return this.lock;
+        };
+
+        /**
+         * Returns lock selector
+         */
+
+        JihadForm.getLockSelector = function()
+        {
+            return this.lockSelector;
+        };
+
+        /**
+         * Creates lock
+         */
+
+        JihadForm.createLock = function()
+        {
+            return new JihadLock(this.getLockSelector());
+        };
+
+        /**
+         * Hide all error fields
+         */
+
+        JihadForm.errorsHide = function($form)
+        {
+            $form.find('[data-role="error"],[role="error"]').hide();
+        };
+
+        /**
+         * Show errors in the form
+         */
+
+        JihadForm.errorsShow = function($form, errors)
+        {
+            var self = this;
+
+            $.each(
+                errors,
+                function(field, error)
+                {
+                    self.errorShow($form, field, error);
+                }
+            );
+        };
+
+        /**
+         * Error show for field
+         */
+
+        JihadForm.errorShow = function($form, field, error)
+        {
+            $form.find('[role="error"][data-field="' + field + '"],[data-role="error"][data-field="' + field + '"]')
+                .text(error.message)
+                .show()
+            ;
+        };
+
+        /**
+         * Show global error
+         */
+
+        JihadForm.errorGlobal = function($form, error)
+        {
+            alert(error.code ? error.code + ': ' + error.message : error.message);
+        };
+
+        /**
+         * Before send function
+         */
+
+        JihadForm.beforeSend = function($form)
+        {
+            this.submitsDisable($form);
+            this.getLock().lock($form);
+        };
+
+        /**
+         * After send function
+         */
+
+        JihadForm.afterSend = function($form)
+        {
+            this.submitsEnable($form);
+            this.getLock().unlock($form);
+        };
+
+        /**
+         * Submits disable
+         */
+
+        JihadForm.submitsDisable = function($form)
+        {
+            $form.find('[type="submit"],[role="submit"],[data-role="submit"]').prop('disabled', true);
+        };
+
+        /**
+         * Submits enable
+         */
+
+        JihadForm.submitsEnable = function($form)
+        {
+            $form.find('[type="submit"],[role="submit"],[data-role="submit"]').prop('disabled', false);
+        };
+
+        /**
+         * Success function
+         */
+
+        JihadForm.onSuccess = function($form, data, textStatus, jqXHR)
+        {
+            this.errorsHide($form);
+
+            if (data && data.result)
+            {
+                if (data.result.errors)
+                {
+                    $form.trigger('jihad-fail', data);
+
+                    this.fail($form, data.result);
+                }
+                else
+                {
+                    $form.trigger('jihad-success', data);
+
+                    this.success($form, data.result);
+                }
+            }
+            else if (data && data.error)
+            {
+                $form.trigger('jihad-fail', data);
+                
+                this.errorGlobal(
+                    $form,
+                    data.error
+                );
+            }
+            else
+            {
+                $form.trigger('jihad-fail', data);
+
+                this.errorGlobal(
+                    $form,
+                    {
+                        message: 'Something is wrong'
+                    }
+                );
+            }
+        };
+
+        /**
+         * Method called on error
+         */
+
+        JihadForm.onError = function($form, jqXHR, textStatus, errorThrown)
+        {
+            $form.trigger('jihad-fail');
+
+            if (!JihadForm.__unloaded)
+                this.errorGlobal(
+                    $form,
+                    {
+                        message: 'Something is wrong'
+                    }
+                );
+        };
+
+        /**
+         * Fail function
+         */
+
+        JihadForm.fail = function($form, result)
+        {
+            this.errorsShow($form, result.errors);
+        };
+
+        /**
+         * Success
+         */
+
+        JihadForm.success = function($form, result)
+        {
+        };
+
+        /**
+         * List of registered blocks
+         */
+
+        JihadForm.submit = function(form)
+        {
+            var self = this;
+            var $form = $(form);
+
+            if (this.getLock().isLocked($form))
+                return false;
+
+            $.ajax(
+                this.getAction($form),
+                {
+                    beforeSend: function()
+                    {
+                        self.beforeSend($form);
+                    },
+                    complete: function()
+                    {
+                        self.afterSend($form);
+                    },
+                    dataType:   'json',
+                    data:       this.getData($form),
+                    type:       this.getMethod($form),
+                    success:    function(data, textStatus, jqXHR)
+                    {
+                        self.onSuccess($form, data, textStatus, jqXHR);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown)
+                    {
+                        self.onError($form, jqXHR, textStatus, errorThrown);
+                    }
+                }
+            );
+
+            return false;
+        };
+    }
+    ()
+);
+;(
+    function()
+    {
+        var JihadLock = window.JihadLock = function(toggle_selector)
+        {
+            /**
+             * Toggle selector
+             */
+
+            this._toggle_selector = toggle_selector || '.js-lock-toggle';
+
+            /**
+             * Return toggle selector
+             */
+
+            this.getToggleSelector = function($elem)
+            {
+                return this._toggle_selector;
+            };
+
+            /**
+             * Is locked
+             */
+
+            this.isLocked = function($elem)
+            {
+                if ($elem.data('jihad-locked'))
+                    return true;
+
+                return false;
+            };
+
+            /**
+             * Lock
+             */
+
+            this.lock = function($elem)
+            {
+                $elem.data('jihad-locked', 1);
+
+                this.afterLock($elem);
+            };
+
+            /**
+             * After lock
+             */
+
+            this.afterLock = function($elem)
+            {
+                $elem.find(this.getToggleSelector($elem)).toggleClass('hidden');
+            };
+
+            /**
+             * Unlock
+             */
+
+            this.unlock = function($elem)
+            {
+                $elem.data('jihad-locked', 0);
+
+                this.afterUnlock($elem);
+            };
+
+            /**
+             * After unlock
+             */
+
+            this.afterUnlock = function($elem)
+            {
+                $elem.find(this.getToggleSelector($elem)).toggleClass('hidden');
+            };
+        };
+    }
+    ()
+);
+;(
+    function()
+    {
+        var JihadModal = window.JihadModal = {
+            $active: null,
+            tpl: 'modal',
+            preprocess: true
+        };
+
+        /**
+         * Returns base modal template
+         */
+
+        JihadModal.getTpl = function()
+        {
+            return this.tpl;
+        };
+
+        /**
+         * Returns action for modal
+         */
+
+        JihadModal.getUrl = function()
+        {
+            return null;
+        };
+
+        /**
+         * Preprocess URL function
+         */
+
+        JihadModal.preprocessUrl = function()
+        {
+            var url = this.getUrl();
+
+            if (url && this.preprocess)
+            {
+                var parsed = JihadUrl.parse(url, true);
+
+                parsed['pathname'] += '.json';
+                parsed['search'] = parsed['query'];
+                parsed['search']['layouts'] = ['layout_content'];
+
+                url = JihadUrl.make(parsed);
+            }
+
+            return url;
+        };
+
+        /**
+         * Returns post data
+         */
+
+        JihadModal.getData = function()
+        {
+            return {};
+        };
+
+        /**
+         * Returns method
+         */
+
+        JihadModal.getMethod = function()
+        {
+            return 'POST';
+        };
+
+        /**
+         * Before send function
+         */
+
+        JihadModal.beforeSend = function()
+        {
+        };
+
+        /**
+         * After send function
+         */
+
+        JihadModal.afterSend = function()
+        {
+        };
+
+        /**
+         * Returns modal
+         */
+
+        JihadModal.getActive = function()
+        {
+            return this.$active;
+        };
+
+        /**
+         * Success function
+         */
+
+        JihadModal.onSuccess = function(data, textStatus, jqXHR)
+        {
+            if (data && data.result)
+            {
+                if (data.result.errors)
+                {
+                    this.fail(data.result);
+                }
+                else
+                {
+                    this.successLayout(data.result);
+                    this.success(data.result);
+                }
+            }
+            else
+            {
+                this.errorGlobal(
+                    {
+                        message: 'Something is wrong'
+                    }
+                );
+            }
+        };
+
+        /**
+         * Method called on error
+         */
+
+        JihadModal.onError = function(jqXHR, textStatus, errorThrown)
+        {
+            this.errorGlobal(
+                {
+                    message: 'Something is wrong'
+                }
+            );
+        };
+
+        /**
+         * Fail function
+         */
+
+        JihadModal.fail = function(result)
+        {
+            this.errorGlobal(
+                {
+                    message: 'Something is wrong'
+                }
+            );
+        };
+
+        /**
+         * Success
+         */
+
+        JihadModal.success = function(result)
+        {
+            JihadModal.getActive().modal('show');
+        };
+
+        /**
+         * Success layout
+         */
+
+        JihadModal.successLayout = function(result)
+        {
+            var $content = JihadModal.getActive().find('.modal-content');
+
+            $content.html(result['layouts']['layout_content']);
+        };
+
+        /**
+         * Show global error
+         */
+
+        JihadModal.errorGlobal = function(error)
+        {
+            alert(error.message);
+        };
+
+        /**
+         * Shows modal
+         */
+
+        JihadModal.show = function(options)
+        {
+            if (JihadModal.getActive())
+                JihadModal.getActive().remove();
+
+            JihadModal.$active = JihadTpl.html(this.getTpl(), options || {});
+            JihadCore.$body.append(JihadModal.getActive());
+
+            var url = this.preprocessUrl();
+            if (url)
+            {
+                var self = this;
+                $.ajax(
+                    url,
+                    {
+                        beforeSend: function()
+                        {
+                            self.beforeSend();
+                        },
+                        complete: function()
+                        {
+                            self.afterSend();
+                        },
+                        dataType:   'json',
+                        data:       this.getData(),
+                        type:       this.getMethod(),
+                        success:    function(data, textStatus, jqXHR)
+                        {
+                            self.onSuccess(data, textStatus, jqXHR);
+
+                            // After do all job we assign bindings
+                            JihadCore.blocksRun(JihadModal.getActive());
+                        },
+                        error: function(jqXHR, textStatus, errorThrown)
+                        {
+                            self.onError(jqXHR, textStatus, errorThrown);
+                        }
+                    }
+                );
+            }
+            else
+            {
+                this.success({});
+
+                JihadCore.blocksRun(JihadModal.getActive());
+            }
+
+            return false;
+        };
+
+        /**
+         * Hide active modal
+         */
+
+        JihadModal.hide = function()
+        {
+            JihadModal.getActive().modal('hide');
+        }
+    }
+    ()
+);
+;(
+    function ()
+    {
+        var JihadModel = window.JihadModel = {};
+        
+        JihadModel.model = function (model)
+        {
+            var self = this;
+            
+            this._model = model || this._model;
+            
+            return {
+                get: function (name)
+                {
+                    if (name) return self._model[name];
+                    return self._model;
+                },
+                
+                set: function (key, value)
+                {
+                    var targetNode = $(self.sel('model') + '[data-model$=":' + key + '"]');
+                    var old_val    = self._model[key];
+                    
+                    self._model[key] = value;
+                    
+                    targetNode.each(
+                        function ()
+                        {
+                            var it     = $(this);
+                            var action = it.data('model').split(':');
+                            var val    = value;
+                            
+                            if (it.is(':checkbox') || it.is(':radio'))
+                                val = !!+val;
+                            
+                            if (action.length === 3)
+                                it[action[0]](action[1], val);
+                            else
+                                it[action[0]](val);
+                            
+                            if (it.is('select') && !it.find('option[value="' + val + '"]').length)
+                                it.val(it.find('option:first').val());
+                            
+                            it.trigger('change');
+                        }
+                    );
+                    
+                    self.el().trigger('model:change', [key, old_val, value])
+                },
+                
+                apply: function ()
+                {
+                    $.each(
+                        self._model,
+                        function (key, value)
+                        {
+                            self.model().set(key, value)
+                        }
+                    );
+                    
+                    self.el().trigger('model:applied')
+                },
+                
+                toParams: function ()
+                {
+                    return $.param(self._model);
+                },
+                
+                serialize: function ()
+                {
+                    return JSON.stringify(self._model);
+                }
+            }
+        };
+        
+        JihadModel.init = function (block)
+        {
+            if (block.model) return;
+            
+            block._model = {};
+            block.model  = JihadModel.model;
+            
+            block.el().on(
+                'input',
+                block.sel('model') + '[data-model]',
+                function ()
+                {
+                    console.log(this);
+                    var it   = $(this);
+                    var name = it.data('model').split(':');
+                    
+                    name = name[name.length - 1];
+                    
+                    block.model().set(name, this.value);
+                }
+            )
+        }
+    }
+    ()
+);
+;(
+    function()
+    {
+        var JihadRowUpdater = window.JihadRowUpdater = {
+            container: null,
+            data: {}
+        };
+
+        /**
+         * Returns initialize function
+         */
+
+        JihadRowUpdater.id = function(id)
+        {
+            return id;
+        };
+
+        /**
+         * Run block
+         */
+
+        JihadRowUpdater.run = function()
+        {
+            var $container = $(this.container);
+            var self = this;
+
+            $.each(
+                this.data,
+                function(id, html)
+                {
+                    var $elem = $container.find('#' + self.id(id));
+
+                    if ($elem.length)
+                    {
+                        if (html)
+                        {
+                            $elem.replaceWith(html);
+                            JihadCore.blocksRun($elem);
+                        }
+                        else
+                        {
+                            $elem.remove();
+                        }
+                    }
+                    else
+                    {
+                        $container.prepend(html);
+                    }
+                }
+            );
+        };
+    }()
+);
+;(
+    function()
+    {
+        var JihadTpl = window.JihadTpl = {};
+
+        // Changing template tags from "{{" to "[["
+        ['evaluate', 'interpolate', 'encode', 'use', 'define', 'conditional', 'iterate'].forEach(
+            function (tag)
+            {
+                var originalRegExp = this[tag],
+                newSource = originalRegExp.source.replace(/\\{\\{/g, '\\[\\[').replace(/\\}\\}/g, '\\]\\]'),
+                flags = (originalRegExp.global ? 'g' : '') + (originalRegExp.multiline ? 'm' : '') + (originalRegExp.ignoreCase ? 'i' : '');
+
+                this[tag] = new RegExp(newSource, flags);
+            },
+            doT.templateSettings
+        );
+
+        /**
+         * Template prefix constant
+         */
+
+        JihadTpl.TPL_PREFIX = 'tpl-';
+
+        /**
+         * Cache
+         */
+
+        JihadTpl.cache = {};
+
+        /**
+         * Helpers
+         */
+
+        JihadTpl.helpers = {
+
+            params: function (obj)
+            {
+                return JSON.stringify(obj);
+            },
+
+            include: function (name, data)
+            {
+                return JihadTpl.html(name, data);
+            }
+        };
+
+        /**
+         * Push template to cache
+         */
+
+        JihadTpl.push = function (name, tmpl)
+        {
+            return JihadTpl.cache[name] = doT.compile(tmpl);
+        };
+
+        /**
+         * Returns template by name
+         */
+
+        JihadTpl.get = function (name)
+        {
+            var $tmpl, tmpl;
+
+            if (name)
+            {
+                // Searching in cache
+                tmpl = JihadTpl.cache[name];
+
+                if (tmpl === undefined)
+                {
+                    // Template not found in cache, so searching for it in DOM
+                    $tmpl = $('#' + JihadTpl.TPL_PREFIX + name);
+
+                    if ($tmpl.length)
+                    {
+                        // Template found in DOM, so putting it in templates cache.
+                        // Trimming result string for easier use in jQuery >= 1.9
+                        // (if it's not starts with "<" and ends with ">" it'll be treated as selector)
+                        // http://jquery.com/upgrade-guide/1.9/#jquery-htmlstring-versus-jquery-selectorstring
+                        tmpl = JihadTpl.push(name, $tmpl.html().trim());
+                    }
+                    else
+                    {
+                        // Putting `null` to templates cache not to search for it in DOM any more
+                        tmpl = JihadTpl.cache[name] = null;
+                    }
+                }
+            }
+
+            return tmpl || null;
+        };
+
+        /**
+         * Returns rendered text
+         */
+
+        JihadTpl.text = function(name, data)
+        {
+            var tmpl = JihadTpl.get(name);
+
+            if (!tmpl)
+                return '';
+
+            return tmpl(data || {});
+        };
+
+        /**
+         * Returns rendered template
+         */
+
+        JihadTpl.html = function(name, data)
+        {
+            return $(JihadTpl.text(name, data));
+        };
+    }
+    ()
+);
+;(
+    function()
+    {
+        var JihadUrl = window.JihadUrl = (function (window, document) {
+            
+            // Checks if string starts with some protocol
+            var ABSOLUTE_URL = /^\w+:\/\//i,
+            // RegExp to parse absolute URL (protocol://user:password@hostname:port/pathname?search#hash)
+                PARSE_URL = /^(.+?:)\/\/(?:.+?(?::.+?)?@)?((.+?)(?::(\d+))?)(\/.*?)?(\?.*?)?(#.*)?$/,
+                PLUS_SIGN = /\+/g,
+                HISTORY_API_SUPPORTED = !!(window.history && window.history.pushState),
+                inited = false,
+                toAbsoluteUrl,
+                getUrlUsingDOM,
+                link = document.createElement('a'),
+                div,
+                currentPath = getPathFromLocation(),
+                currentHash = unescapeHash(getHashFromLocation()),
+                getPath,
+                getHash,
+                setHash,
+                encodeUrlQuery = $.param.bind($),
+            // DUDU-1372: replacing '+' with '%20'
+                decodeQueryPart = function (str) {
+                    return decodeURIComponent(str.replace(PLUS_SIGN, '%20'));
+                },
+                localOrigin;
+
+            // ==================================== Common url methods ====================================
+
+            // Making toAbsoluteUrl function
+            // Проверка, работает ли преобразование урла в абсолютный через установку href у ссылки (не работает в IE<8)
+            link.href = 'a';
+            if (link.href === 'a') {
+                div = document.createElement('div');
+                getUrlUsingDOM = function (url) {
+                    div.innerHTML = '<a href="' + url.replace(/"/g, '%22') + '"></a>';
+                    
+                    return div.firstChild.href;
+                };
+            } else {
+                getUrlUsingDOM = function (url) {
+                    link.href = url;
+                    
+                    return link.href;
+                };
+            }
+            
+            toAbsoluteUrl = function (url) {
+                url = url || '';
+                
+                return ABSOLUTE_URL.test(url) ? url : getUrlUsingDOM(url);
+            };
+
+            function nativeNavigation(url, replace) {
+                window.location[replace ? 'replace' : 'assign'](url);
+            }
+
+            function pseudoNavigation(url, replace) {
+                if (HISTORY_API_SUPPORTED) {
+                    window.history[replace ? 'replaceState' : 'pushState']({}, null, url);
+                } else {
+                    updateLocationHash(url, replace);
+                }
+            }
+
+            function parseUrl(url, parseQueryParams) {
+                var info = null;
+                
+                if (url) {
+                    url = toAbsoluteUrl(url);
+                    info = PARSE_URL.exec(url);
+                }
+
+                if (info) {
+                    info = {
+                        href: url,
+                        protocol: info[1],
+                        host: info[2] || '',
+                        hostname: info[3] || '',
+                        port: info[4] || '',
+                        pathname: info[5] || '',
+                        search: (!info[6] || info[6].length === 1) ? '' : info[6],
+                        hash: (!info[7] || info[7].length === 1) ? '' : info[7]
+                    };
+                    info.path = info.pathname + info.search;
+                    info.isLocal = isLocalUrl(info);
+                    if (parseQueryParams) {
+                        info.query = parseUrlQuery(info.search);
+                    }
+                }
+
+                return info;
+            }
+
+            function makeUrl(urlInfo) {
+                var url = '',
+                    path,
+                    search,
+                    hash;
+
+                urlInfo = urlInfo || {};
+
+                // Protocol
+                url += (urlInfo.protocol || location.protocol) + '//';
+
+                // Host
+                if (urlInfo.host) {
+                    url += urlInfo.host;
+                } else if (urlInfo.hostname) {
+                    url += urlInfo.hostname + (urlInfo.port ? ':' + urlInfo.port : '');
+                } else {
+                    url += location.host;
+                }
+
+                // Path
+                path = urlInfo.pathname;
+                if (path && path.charAt(0) === '/') {
+                    path = path.slice(1);
+                }
+                if (path) {
+                    url += '/' + path;
+                }
+
+                // Query
+                search = urlInfo.search;
+                if (search) {
+                    if (typeof search === 'string') {
+                        if (search.charAt(0) === '?') {
+                            search = search.slice(1);
+                        }
+                    } else {
+                        search = encodeUrlQuery(search);
+                    }
+                    if (search) {
+                        url += '?' + search;
+                    }
+                }
+
+                // Hash
+                hash = url.hash;
+                if (hash && hash.charAt(0) === '#') {
+                    hash = hash.slice(1);
+                }
+                if (hash) {
+                    url += '#' + hash;
+                }
+
+                return url;
+            }
+
+            function parseUrlQuery(query) {
+                var obj = {};
+
+                // Stripping leading "?"
+                if (query && query.charAt(0) === '?') {
+                    query = query.slice(1);
+                }
+
+                if (query) {
+                    query.split('&').forEach(function (pair) {
+                        var key,
+                            val;
+
+                        pair = pair.split('=');
+                        key = decodeQueryPart(pair[0]);
+                        if (key) {
+                            val = decodeQueryPart(pair.slice(1).join('='));
+                            obj[key] = val;
+                        }
+                    });
+                }
+
+                return obj;
+            }
+
+            function isLocalUrl(url) {
+                if (typeof url === 'string') {
+                    url = parseUrl(url);
+                }
+
+                return (url && url.protocol === window.location.protocol && url.host === window.location.host);
+            }
+            
+            // ==================================== Navigation methods ====================================
+
+            function getPathFromLocation() {
+                return window.location.pathname + window.location.search;
+            }
+
+            function getHashFromLocation() {
+                return getHashFromStr(window.location.href);
+            }
+
+            function getHashFromStr(str) {
+                return str.split('#').slice(1).join('#');
+            }
+            
+            function unescapeHash(hash) {
+                return hash.slice(0, 2) === '//' ? hash.slice(1) : hash;
+            }
+
+            function escapeHash(hash) {
+                return hash.charAt(0) === '/' ? '/' + hash : hash;
+            }
+
+            function updateLocationHash(hash, replace) {
+                if (replace) {
+                    window.location.replace('#' + hash);
+                } else {
+                    window.location.hash = hash;
+                }
+            }
+
+            function formUrl(path, hash) {
+                return hash ? path + '#' + escapeHash(hash) : path;
+            }
+
+            if (HISTORY_API_SUPPORTED) {
+                getPath = function (url) {
+                    return url == null ? getPathFromLocation() : parseUrl(url).path;
+                };
+                
+                getHash = function (url) {
+                    return unescapeHash(url == null ? getHashFromLocation() : getHashFromStr(url));
+                };
+                
+                setHash = function (hash) {
+                    if (hash) {
+                        updateLocationHash(escapeHash(hash), true);
+                    } else {
+                        window.history.replaceState({}, document.title, getPathFromLocation());
+                    }
+                };
+            } else {
+                getPath = function (url) {
+                    if (url == null) {
+                        url = getHashFromLocation();
+                    }
+                    
+                    return parseUrl(url).path;
+                };
+                
+                getHash = function (url) {
+                    if (url == null) {
+                        url = getHashFromLocation();
+                    }
+
+                    return unescapeHash(getHashFromStr(url));
+                };
+                
+                setHash = function (hash) {
+                    updateLocationHash(formUrl(getPath(), hash), true);
+                };
+            }
+
+            /**
+             * Checks url for changes
+             * @private
+             */
+            function checkUrl() {
+                handleNavigation(getPath(), getHash(), {
+                    trigger: true,
+                    replace: true,
+                    ignoreSameUrl: true
+                });
+            }
+
+            /**
+             * @class JihadUrl
+             * @singleton
+             *
+             * Provides methods to work with page url (parse, navigate and etc.)
+             */
+            return {
+
+                /**
+                 * Converts URL to absolute (with protocol, domain etc.)
+                 *
+                 *     // Current page is 'http://dudu.com/some/long/path'
+                 *
+                 *     JihadUrl.toAbsolute('../another/long/path');
+                 *     // ==> 'http://dudu.com/some/another/long/path'
+                 *     JihadUrl.toAbsolute('/user');
+                 *     // ==> 'http://dudu.com/user'
+                 *
+                 * @param {String} url
+                 * @return {String}
+                 */
+                toAbsolute: toAbsoluteUrl,
+
+                /**
+                 * Parses url and returns object with it's parts.
+                 * Object attributes are the same as that of `window.location` object.
+                 * 
+                 * @param {String} url
+                 * @return {Object|null} Object with url parts, if parsing was successful.
+                 *   Otherwise `null`.
+                 * @return {String} return.href  Absolute url
+                 * @return {String} return.protocol  Protocol (with tailing `:`)
+                 * @return {String} return.host  Host (with port, if it's explicitly specified)
+                 * @return {String} return.hostname  Hostname (without port)
+                 * @return {String} return.port  Port
+                 * @return {String} return.pathname  Pathname (with leading `/`)
+                 * @return {String} return.search  Search query (with leading `?`)
+                 * @return {String} return.path  Pathname-part concatenated with search-part
+                 * @return {String} return.hash  Hash (with leading `#`)
+                 * @return {Boolean} return.isLocal  Is this url local (see #isLocal)
+                 */
+                parse: parseUrl,
+
+                /**
+                 * Makes url from object with url info.
+                 * 
+                 *   JihadUrl.make({
+                 *     search: {
+                 *       a: 1,
+                 *       b: '',
+                 *       c: null,
+                 *       d: 'xaxa'
+                 *     },
+                 *     hash: '#'
+                 *   });
+                 *   // ==> 'http://dudu.com?a=1&b=&c=&d=xaxa'
+                 * 
+                 * @param {Object} urlInfo
+                 * @param {String} [urlInfo.protocol=location.protocol]
+                 * @param {String} [urlInfo.host=location.host]  If neither urlInfo.host nor urlInfo.hostname is specified, location.host is used.
+                 * @param {String} [urlInfo.hostname]  It's used if urlInfo.host is not specified.
+                 * @param {String|Number} [urlInfo.port]  Used only if urlInfo.hostname specified. 
+                 * @param {String} [urlInfo.pathname]  Can be prefixed with "/".
+                 * @param {String|Object} [urlInfo.search]  Can be prefixed with "?". If it's object, it's encoded to string with #encodeUrlQuery.
+                 * @param {String|Object} [urlInfo.hash]  Can be prefixed with "#".
+                 * @returns {String}  Full url.
+                 */
+                make: makeUrl,
+
+                /**
+                 * Parses search query string into object.
+                 * Nested parameters are **not supported** (e.g. 'user[name]=th0r&user[email]=grunin.ya@ya.ru')
+                 *
+                 *     JihadUrl.parseQuery('a=1&b=false');
+                 *     // ==> {a: '1', b: 'false'}
+                 *     JihadUrl.parseQuery('?a=1&b=false', true)
+                 *     // ==> {a: 1, b: false}
+                 *
+                 *     // Nested parameters are parsed not as expected:
+                 *     JihadUrl.parseQuery('user[name]=th0r&user[email]=grunin.ya@ya.ru')
+                 *     // ==> {'user[name]': 'th0r', 'user[email]': 'grunin.ya@ya.ru'}
+                 *
+                 * @param {String} query  Url search query string to parse (with or without leading `?`)
+                 * @return {Object}
+                 */
+                parseQuery: parseUrlQuery,
+
+                /**
+                 * Encodes object to query string.
+                 * Can encode arrays or objects.
+                 * 
+                 *   JihadUrl.encodeQuery({
+                 *     a: 1,
+                 *     b: null,
+                 *     c: '',
+                 *     d: 'xaxa',
+                 *     e: [1, 2]
+                 *   });
+                 *   // ==> 'a=1&b=&c=&d=xaxa&e[]=1&e=2'
+                 *   
+                 * @param {Object} queryObj
+                 * @return {String}
+                 */
+                encodeQuery: encodeUrlQuery,
+                    
+                /**
+                 * Checks, whether passed url is local (protocol, host and port must be the same as at current page).
+                 * @param {String|Object} url  Can be either string, or parsed url (with #parse method).
+                 * @return {Boolean}
+                 */
+                isLocal: isLocalUrl,
+
+                /**
+                 * Fully reload current page, using native browser reloading method.
+                 */
+                reload: function () {
+                    window.location.reload();
+                },
+
+                /**
+                 * Return current path
+                 * 
+                 * @return {String} relative path
+                 */
+                getPath: function () {
+                    return currentPath;
+                },
+
+                /**
+                 * Return GET params for current url
+                 *
+                 * @return {Object}
+                 */
+                getQuery: function () {
+                    return parseUrl(currentPath, true).query;
+                },
+
+                /**
+                 * Get hash from url
+                 * 
+                 * @return {String}
+                 */
+                getHash: function () {
+                    return getHash();
+                },
+
+                /**
+                 * Returns current path with hash.
+                 * 
+                 * @return {String}
+                 */
+                getUrl: function () {
+                    return formUrl(currentPath, getHash());
+                },
+
+                /**
+                 * Return origin of passed url or local origin if argument is not provided.
+                 * 
+                 * @param {String}  [url]   Address from which to get origin
+                 * @returns {String}
+                 */
+                getOrigin: function getOrigin(url) {
+                    if (!url) {
+                        localOrigin = localOrigin || window.location.origin || getOrigin(window.location.href);
+                        
+                        return localOrigin;
+                    }
+                    url = parseUrl(url);
+                    
+                    return url.protocol + '//' + url.host;
+                },
+
+                /**
+                 * Set url hash
+                 * 
+                 * @param {String} hash
+                 */
+                setHash: setHash
+
+            };
+
+        }(window, document));
+    }
+    ()
+);
+;(
+    function()
+    {
+        var AnimationBlock = {};
+
+        JihadCore.blockRegister(
+            $.extend(
+                AnimationBlock,
+                JihadBlock,
+                {
+                    /**
+                     * Returns block selector
+                     */
+
+                    getSelector: function()
+                    {
+                        return '.jh-animation';
+                    },
+
+                    /**
+                     * Returns block bindins
+                     */
+
+                    getBindings: function()
+                    {
+                        return [];
+                    },
+
+                    /**
+                     * Initialize block
+                     */
+
+                    initialize: function($target)
+                    {
+                        var type = $target.data('type');
+
+                        switch (type)
+                        {
+                            case 'rotating-plane':
+                                AnimationBlock.initializeRotatingPlane($target);
+                                break;
+
+                            case 'double-bounce':
+                                AnimationBlock.initializeDoubleBounce($target);
+                                break;
+
+                            case 'wave':
+                                AnimationBlock.initializeWave($target);
+                                break;
+
+                            case 'pulse':
+                                AnimationBlock.initializePulse($target);
+                                break;
+
+                            case 'three-bounce':
+                                AnimationBlock.initializeThreeWave($target);
+                                break;
+
+                            case 'fading-circle':
+                                AnimationBlock.initializeFadingCircle($target);
+                                break;
+                        }
+                    },
+
+                    /**
+                     * Initialize spinner for double bounce
+                     */
+
+                    initializeDoubleBounce: function($target)
+                    {
+                        $target.addClass('sk-double-bounce');
+                        $target.html(
+                            [
+                                '<div class="sk-child sk-double-bounce1"></div>',
+                                '<div class="sk-child sk-double-bounce2"></div>'
+                            ].join('')
+                        );
+                    },
+
+                    /**
+                     * Initialize spinner for wave
+                     */
+
+                    initializeWave: function($target)
+                    {
+                        $target.addClass('sk-wave');
+                        $target.html(
+                            [
+                                '<div class="sk-rect sk-rect1"></div>',
+                                '<div class="sk-rect sk-rect2"></div>',
+                                '<div class="sk-rect sk-rect3"></div>',
+                                '<div class="sk-rect sk-rect4"></div>',
+                                '<div class="sk-rect sk-rect5"></div>'
+                            ].join('')
+                        );
+                    },
+
+                    /**
+                     * Initialize spinner for pulse
+                     */
+
+                    initializePulse: function($target)
+                    {
+                        $target.addClass('sk-spinner-pulse');
+                    },
+
+                    /**
+                     * Initialize spinner for double bounce
+                     */
+
+                    initializeThreeWave: function($target)
+                    {
+                        $target.addClass('sk-three-bounce');
+                        $target.html(
+                            [
+                                '<div class="sk-child sk-bounce1"></div>',
+                                '<div class="sk-child sk-bounce2"></div>',
+                                '<div class="sk-child sk-bounce3"></div>'
+                            ].join('')
+                        );
+                    },
+
+                    /**
+                     * Initialize spinner for double bounce
+                     */
+
+                    initializeFadingCircle: function($target)
+                    {
+                        $target.addClass('sk-fading-circle');
+                        $target.html(
+                            [
+                                '<div class="sk-circle1 sk-circle"></div>',
+                                '<div class="sk-circle2 sk-circle"></div>',
+                                '<div class="sk-circle3 sk-circle"></div>',
+                                '<div class="sk-circle4 sk-circle"></div>',
+                                '<div class="sk-circle5 sk-circle"></div>',
+                                '<div class="sk-circle6 sk-circle"></div>',
+                                '<div class="sk-circle7 sk-circle"></div>',
+                                '<div class="sk-circle8 sk-circle"></div>',
+                                '<div class="sk-circle9 sk-circle"></div>',
+                                '<div class="sk-circle10 sk-circle"></div>',
+                                '<div class="sk-circle11 sk-circle"></div>',
+                                '<div class="sk-circle12 sk-circle"></div>'
+                            ].join('')
+                        );
+                    },
+
+                    /**
+                     * Initialize rotating plane
+                     */
+
+                    initializeRotatingPlane: function($target)
+                    {
+                        $target.addClass('sk-rotating-plane');
+                    }
+                }
+            )
+        );
+    }
+    ()
+);
+;(function () {
+    var ListingBlock = {};
+
+    /**
+     * In HTML:
+     *  <div class="js-list">
+     *      ...
+     *
+     *      <button class="btn jh-list__more" data-more-url="{more_url}">Load More</button>
+     *  </div>
+     *
+     * Expected response:
+     *  {
+     *      "result": {
+     *          "html": "<h1>Hello</h1><button class=\"btn jh-list__more\" data-more-url=\"{new_more_url}\">Load More</button>",
+     *      }
+     *  }
+     */
+
+    JihadCore.blockRegister(
+        $.extend(
+            ListingBlock,
+            JihadBlock,
+            {
+                /**
+                 * Returns block selector
+                 */
+
+                getSelector: function()
+                {
+                    return '.jh-list';
+                },
+
+                /**
+                 * Return initialize function
+                 */
+
+                initialize: function ($target)
+                {
+                    this._checkDistance = JihadCore.throttle(this._checkDistance.bind(this, $target), 500);
+                    JihadCore.$win.on('load scroll resize', this._checkDistance);
+                    this._checkDistance();
+                },
+
+                getMoreUrl: function($target)
+                {
+                    var $moreBtn,
+                        hasMore;
+
+                    if (this._noMore)
+                    {
+                        return null;
+                    }
+
+                    $moreBtn = this.getMoreBtn($target);
+                    hasMore = !!$moreBtn.length;
+
+                    if (!hasMore)
+                    {
+                        JihadCore.$win.off('load scroll resize', this._checkDistance);
+                        this._noMore = true;
+                    }
+
+                    return hasMore
+                        ? $moreBtn.data('more-url')
+                        : null
+                    ;
+                },
+
+                getMoreBtn: function($target)
+                {
+                    return $target.find('.jh-list__more');
+                },
+
+                _checkDistance: function($target)
+                {
+                    var lock = new JihadLock($target);
+
+                    if (lock.isLocked($target))
+                        return false;
+
+                    var self = this,
+                        $win = JihadCore.$win,
+                        scrollBottom,
+                        bottomEdge,
+                        moreUrl = this.getMoreUrl($target)
+                    ;
+
+                    if (moreUrl)
+                    {
+                        scrollBottom = $win.scrollTop() + $win.height();
+                        bottomEdge = $target.offset().top + $target.height();
+
+                        if (bottomEdge - scrollBottom < 1000)
+                        {
+                            lock.lock($target);
+
+                            $target.addClass('jh-list__loading');
+                            $target
+                                .find('.jh-list__toggle')
+                                .toggleClass('jh-list__hidden')
+                            ;
+
+                            this.getMoreBtn($target).unbind();
+
+                            $.ajax(
+                                    {
+                                        url: moreUrl,
+                                        dataType: 'json',
+                                        complete: function ()
+                                        {
+                                            lock.unlock($target);
+                                        }
+                                    }
+                                )
+                                .done(
+                                    function (json)
+                                    {
+                                        var result = json && json.result || {},
+                                            $html
+                                        ;
+
+                                        self.getMoreBtn($target).remove();
+
+                                        lock.unlock($target);
+
+                                        $target.removeClass('jh-list__loading');
+                                        $target
+                                            .find('.jh-list__toggle')
+                                            .toggleClass('jh-list__hidden')
+                                        ;
+
+                                        if (result.html)
+                                        {
+                                            $html = $(result.html);
+                                            $target.append($html);
+
+                                            JihadCore.blocksRun($html);
+                                        }
+                                    }
+                                )
+                            ;
+                        }
+                    }
+                }
+            }
+        )
+    );
+}());
+;(
+    function ()
+    {
+        var SelectBlock = {};
+        
+        JihadCore.blockRegister(
+            $.extend(
+                SelectBlock,
+                JihadBlock,
+                {
+                    /**
+                     * Returns block selector
+                     */
+                    
+                    getSelector: function ()
+                    {
+                        return '.jh-select';
+                    },
+                    
+                    /**
+                     * Returns block bindins
+                     */
+                    
+                    getBindings: function ()
+                    {
+                        var self = this;
+                        
+                        return [
+                            [
+                                'change',
+                                '.jh-select__control',
+                                function ()
+                                {
+                                    var $elem        = $(this);
+                                    var $select      = $elem.closest('.jh-select');
+                                    var $placeholder = $select.find('.jh-select__placeholder');
+                                    var label_start  = $placeholder.data('label-start');
+                                    var label_end    = $placeholder.data('label-end');
+                                    var $option      = $select.find('option:selected');
+                                    
+                                    if ($option.val() !== '' && $option.val() != 0)
+                                        $placeholder.empty().append(
+                                            $('<span>', {
+                                                class: 'jh-select__label jh-select__label--start',
+                                                html : label_start
+                                            }),
+                                            $('<span>', {
+                                                class: 'jh-select__label',
+                                                html : $option.html()
+                                            }),
+                                            $('<span>', {
+                                                class: 'jh-select__label jh-select__label--end',
+                                                html : label_end
+                                            })
+                                        );
+                                    else
+                                        $select.find('.jh-select__placeholder').html($option.html());
+                                    
+                                    self.setOptionAccess($elem);
+                                }
+                            ],
+                            [
+                                'focus',
+                                '.jh-select__control',
+                                function ()
+                                {
+                                    var $elem   = $(this);
+                                    var $select = $elem.closest('.jh-select');
+                                    
+                                    $select.toggleClass('focus', true);
+                                },
+                            ],
+                            [
+                                'blur',
+                                '.jh-select__control',
+                                function ()
+                                {
+                                    var $elem   = $(this);
+                                    var $select = $elem.closest('.jh-select');
+                                    
+                                    $select.toggleClass('focus', false);
+                                }
+                            ],
+                            [
+                                'click, focus',
+                                '.jh-select__input',
+                                function ()
+                                {
+                                    var $elem   = $(this);
+                                    var $select = $elem.closest('.jh-select');
+                                    
+                                    $select.toggleClass('focus', true);
+                                    $elem.toggleClass('m-filled', true);
+                                    
+                                    var value = parseInt($elem.val().replace(/[^0-9]/g, '')) || 0;
+                                    if (value == 0)
+                                        $elem.val('');
+                                }
+                            ],
+                            [
+                                'blur',
+                                '.jh-select__input',
+                                function ()
+                                {
+                                    var $elem   = $(this);
+                                    var $select = $elem.closest('.jh-select');
+                                    var $label  = $select.find('.jh-select__placeholder');
+                                    
+                                    $select.toggleClass('focus', false);
+                                    $elem.toggleClass('m-filled', false);
+                                    
+                                    var value = parseInt($elem.val().replace(/[^0-9]/g, '')) || 0;
+                                    if (value == $select.data('default-value'))
+                                    {
+                                        $select.toggleClass('m-default-value', true);
+                                    }
+                                    else
+                                    {
+                                        $select.toggleClass('m-default-value', false);
+                                    }
+                                    
+                                    if ($select.data('default-label'))
+                                    {
+                                        $label.text(
+                                            JihadTpl.text(
+                                                $select.data('default-label'),
+                                                {
+                                                    'value': value
+                                                }
+                                            )
+                                        );
+                                    }
+                                    else
+                                    {
+                                        $label.html('');
+                                    }
+                                }
+                            ]
+                        ];
+                    },
+                    
+                    setOptionAccess: function (select)
+                    {
+                        var rel = this.el().data('rel');
+                        var options, index, isFrom;
+                        
+                        if (!rel) return;
+                        
+                        index = select.find('option:selected').index();
+                        
+                        rel    = rel.split(':');
+                        isFrom = rel[0] === 'from';
+    
+                        if (!this.el().data('equality'))
+                            isFrom ? index-- : index++;
+                        
+                        options = $('#' + rel[1] + ':visible option');
+                        
+                        if (select.val() === '' || select.val() == 0) return options.attr('disabled', false);
+                        
+                        options
+                            .attr('disabled', false)
+                            .eq(index)[isFrom ? 'nextAll' : 'prevAll']()
+                            .attr('disabled', true);
+                    }
+                }
+            )
+        );
+    }
+    ()
+);
+;(
+    function()
+    {
+        var StickBlock = {};
+
+        JihadCore.blockRegister(
+            $.extend(
+                StickBlock,
+                JihadBlock,
+                {
+                    /**
+                     * Returns block selector
+                     */
+
+                    getSelector: function()
+                    {
+                        return '.jh-stick';
+                    },
+
+                    /**
+                     * Returns block bindins
+                     */
+
+                    getBindings: function()
+                    {
+                        return [];
+                    },
+
+                    /**
+                     * Initialize function
+                     */
+
+                    initialize: function($target)
+                    {
+                        $target.stick_in_parent(
+                            $target.data('stick')
+                        );
+                    }
+                }
+            )
+        );
+    }
+    ()
+);
+;(
+    function()
+    {
+        var TextareaBlock = {};
+
+        JihadCore.blockRegister(
+            $.extend(
+                TextareaBlock,
+                JihadBlock,
+                {
+                    /**
+                     * Returns block selector
+                     */
+
+                    getSelector: function()
+                    {
+                        return '.jh-textarea';
+                    },
+
+                    /**
+                     * Returns block bindins
+                     */
+
+                    getBindings: function()
+                    {
+                        return [];
+                    },
+
+                    /**
+                     * Initialize function
+                     */
+
+                    initialize: function($target)
+                    {
+                        JihadBlock.initialize($target);
+
+                        var $textarea = $target.find('textarea');
+
+                        autosize($textarea);
+                        $textarea.on(
+                            'keydown',
+                            null,
+                            'ctrl+return',
+                            function()
+                            {
+                                $textarea.parents('form').submit();
+                            }
+                        );
+                    }
+                }
+            )
+        );
+    }
+    ()
+);
