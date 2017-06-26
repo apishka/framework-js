@@ -497,7 +497,7 @@
                             it(
                                 "|uppercase", function ()
                                 {
-                                    expect(self.el('model').attr('title') === 'THE TEXT MODIFIED, WAS UPPERCASE');
+                                    expect(self.el('model').attr('title')).toBe('THE TEXT MODIFIED, WAS UPPERCASE');
                                 }
                             );
                         }
@@ -535,20 +535,81 @@
                 
                 getBindings: function ()
                 {
-                    var self = this;
-                    
                     return [];
                 },
                 
                 initialize: function ()
                 {
-                    var self = this;
-                    
                     JihadModel.init(this);
-                    
-                    
                 }
             }
         )
     );
 }();
+
+/* block-chain
+================================================== */
+
+!function()
+{
+    var Module   = {};
+    
+    JihadCore.blockRegister(
+        $.extend(
+            Module,
+            JihadBlock,
+            {
+                /**
+                 * Returns block selector
+                 */
+                
+                getSelector: function ()
+                {
+                    return '.block-chain';
+                },
+                
+                /**
+                 * Returns block bindins
+                 */
+                
+                getBindings: function (block)
+                {
+                    var self = this;
+                    
+                    return [];
+                },
+                
+                initialize: function(block)
+                {
+                    JihadModel.init(this);
+    
+                    this.model()
+                        .set('name', 'Use chain for model')
+                        .set('description', 'Was successfully');
+                },
+    
+                finalize: function ()
+                {
+                    var self = this;
+                    describe(
+                        "Model chains", function ()
+                        {
+                            it(
+                                "chain 1", function ()
+                                {
+                                    expect(self.el('model[data-model="text:name"]').text()).toBe('Use chain for model')
+                                }
+                            );
+                            it(
+                                "chain 2", function ()
+                                {
+                                    expect(self.el('model[data-model="text:description"]').text()).toBe('Was successfully')
+                                }
+                            );
+                        }
+                    );
+                }
+            }
+        )
+    );
+}()

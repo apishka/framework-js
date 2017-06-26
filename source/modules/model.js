@@ -49,7 +49,9 @@
                         }
                     );
                     
-                    self.el().trigger('model:change', [key, old_val, value])
+                    self.el().trigger('model:change', [key, old_val, value]);
+                    
+                    return this;
                 },
                 
                 apply: function ()
@@ -62,7 +64,9 @@
                         }
                     );
                     
-                    self.el().trigger('model:applied')
+                    self.el().trigger('model:applied');
+    
+                    return this;
                 },
                 
                 toParams: function ()
