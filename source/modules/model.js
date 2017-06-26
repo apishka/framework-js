@@ -18,7 +18,7 @@
                 
                 set: function (key, value)
                 {
-                    var targetNode = $(self.sel('model') + '[data-model$=":' + key + '"]');
+                    var targetNode = $(self.sel('model') + '[data-model*=":' + key + '"]');
                     var old_val    = self._model[key];
                     
                     self._model[key] = value;
@@ -27,11 +27,15 @@
                         function ()
                         {
                             var it     = $(this);
-                            var action = it.data('model').split(':');
+                            var mod    = it.data('model').split('|');
+                            var action = mod[0].split(':');
                             var val    = value;
                             
                             if (it.is(':checkbox') || it.is(':radio'))
                                 val = !!+val;
+                            
+                            if (mod[1] && self[mod[1]])
+                                val = self[mod[1]](val);
                             
                             if (action.length === 3)
                                 it[action[0]](action[1], val);

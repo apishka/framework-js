@@ -342,9 +342,9 @@
                             'model:change',
                             function (e, key, old_value, value)
                             {
-                                console.warn(key === 'varName2');
-                                console.warn(old_value === 'Model was replace');
-                                console.warn(value === 'Button click updated the value');
+                                console.log(key === 'varName2');
+                                console.log(old_value === 'Model was replace');
+                                console.log(value === 'Button click updated the value');
                             }
                         ],
                         
@@ -352,7 +352,8 @@
                             'model:applied',
                             function (e)
                             {
-                                console.log(e.type === 'model:applied', '(2 false it\'s normal)');
+                                console.log('two output above must be false');
+                                console.log(e.type === 'model:applied');
                             }
                         ],
                         
@@ -437,6 +438,75 @@
         )
     );
 }();
+
+/* Block modifier
+================================================== */
+
+!function()
+{
+    var Module   = {};
+    
+    JihadCore.blockRegister(
+        $.extend(
+            Module,
+            JihadBlock,
+            {
+                /**
+                 * Returns block selector
+                 */
+                
+                getSelector: function ()
+                {
+                    return '.block-mod';
+                },
+                
+                /**
+                 * Returns block bindins
+                 */
+                
+                getBindings: function (block)
+                {
+                    var self = this;
+                    
+                    return [];
+                },
+                
+                uppercase: function(value)
+                {
+                    return value.toUpperCase();
+                },
+    
+                other: function(value)
+                {
+                    return $('<h4/>').text(value.toUpperCase());
+                },
+                
+                initialize: function(block)
+                {
+                    JihadModel.init(this);
+                    
+                    this.model().set('myTitle', 'The text modified, was uppercase')
+                },
+                
+                finalize: function()
+                {
+                    var self = this;
+                    describe(
+                        "Model modifier", function ()
+                        {
+                            it(
+                                "|uppercase", function ()
+                                {
+                                    expect(self.el('model').attr('title') === 'THE TEXT MODIFIED, WAS UPPERCASE');
+                                }
+                            );
+                        }
+                    );
+                }
+            }
+        )
+    );
+}()
 
 /* Block5
  ================================================== */
